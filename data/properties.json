@@ -1,0 +1,32 @@
+[
+  {
+    "id": "p1782739174353",
+    "title": "الخبر الكورنيش",
+    "offer": "بيع",
+    "type": "فيلا",
+    "ref": "",
+    "status": "متاح",
+    "city": "الخبر",
+    "district": "الكورنيش",
+    "address": "شارع الكورنيش",
+    "lat": "",
+    "lng": "",
+    "price": 900000,
+    "currency": "SAR",
+    "area": 122,
+    "beds": 5,
+    "baths": 4,
+    "parking": 1,
+    "description": "",
+    "features": "",
+    "images": [
+      "/uploads/1782739170145-776750.jpg"
+    ],
+    "phone": "",
+    "furnished": false,
+    "published": true,
+    "featured": false,
+    "createdAt": "2026-06-29T13:19:34.353Z",
+    "updatedAt": "2026-06-29T13:19:34.353Z"
+  }
+]

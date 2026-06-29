@@ -1,0 +1,14 @@
+# dependencies
+node_modules/
+
+# uploaded property images (user-generated, not part of source)
+uploads/*
+!uploads/.gitkeep
+
+# OS
+.DS_Store
+Thumbs.db
+
+# environment
+.env
+.env.local

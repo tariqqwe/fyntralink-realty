@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; background: #EDEEEF; font-family: 'Plus Jakarta Sans', sans-serif; -webkit-font-smoothing: antialiased; }
+
+    /* ── Layout ─────────────────────────────────────────────────────── */
+    .dc-root    { width:100%; min-height:100vh; display:flex; background:#F4F5F5; color:#16261C; font-family:'Plus Jakarta Sans',sans-serif; }
+    .dc-sidebar { width:248px; flex-shrink:0; background:#FBFBFB; border-right:1px solid #ECECEC; padding:22px 18px; display:flex; flex-direction:column; min-height:100vh; overflow:hidden; transition:width .2s, padding .2s; }
+    .dc-main    { flex:1; min-width:0; padding:22px 28px 34px; overflow-x:hidden; }
+
+    /* ── Dashboard grids ─────────────────────────────────────────────── */
+    .dash-r1 { display:grid; grid-template-columns:318px 1fr 318px; gap:18px; margin-bottom:18px; }
+    .dash-r2 { display:grid; grid-template-columns:1fr 1fr;         gap:18px; margin-bottom:18px; }
+    .dash-r3 { display:grid; grid-template-columns:1.42fr 1fr 1fr;  gap:18px; }
+
+    /* ── Responsive breakpoints ──────────────────────────────────────── */
+    @media (max-width: 1280px) {
+      .dash-r1 { grid-template-columns: 1fr 1fr 260px; }
+    }
+    @media (max-width: 1024px) {
+      .dc-sidebar { width:64px; padding:22px 10px; }
+      .sb-label, .sb-user-info, .sb-user-chevron, .sb-menu-label, .sb-nav-text { display:none; }
+      .dc-main    { padding:18px 18px 28px; }
+      .dash-r1    { grid-template-columns:1fr 1fr; }
+      .dash-r2    { grid-template-columns:1fr; }
+      .dash-r3    { grid-template-columns:1fr 1fr; }
+    }
+    @media (max-width: 768px) {
+      .dc-sidebar { display:none; }
+      .dc-main    { padding:14px 14px 24px; }
+      .dash-r1, .dash-r2, .dash-r3 { grid-template-columns:1fr; }
+    }
+  </style>
+</helmet>
+
+<div class="dc-root">
+
+  <!-- ============ SIDEBAR ============ -->
+  <aside class="dc-sidebar">
+    <div style="display: flex; align-items: center; gap: 9px; padding: 4px 6px 22px 6px;">
+      <div style="width: 26px; height: 26px; border-radius: 8px; background: #16261C; flex-shrink: 0; display: flex; align-items: center; justify-content: center;">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M5 19V5l7 6 7-6v14" stroke="#8BD850" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+      </div>
+      <span class="sb-label" style="font-size: 19px; font-weight: 800; letter-spacing: -0.4px;">Tariq</span>
+    </div>
+
+    <div style="display: flex; align-items: center; gap: 10px; padding: 9px; border: 1px solid #ECECEC; border-radius: 14px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(0,0,0,0.03);">
+      <div style="width: 36px; height: 36px; border-radius: 50%; flex-shrink:0; background: linear-gradient(135deg,#7FCB45,#3F8F2E); color:#fff; font-size:13px; font-weight:700; display:flex; align-items:center; justify-content:center;">JW</div>
+      <div class="sb-user-info" style="flex: 1; min-width: 0;">
+        <div style="font-size: 13.5px; font-weight: 700; line-height: 1.1;">ُTariq</div>
+        <div style="font-size: 11.5px; color: #9AA0A6; margin-top: 2px;">Personal Account</div>
+      </div>
+      <svg class="sb-user-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="#9AA0A6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+    </div>
+
+    <div class="sb-menu-label" style="font-size: 10.5px; font-weight: 600; letter-spacing: 1px; color: #AEB2B6; margin: 26px 8px 12px;">MAIN MENU</div>
+
+    <nav style="display: flex; flex-direction: column; gap: 8px; padding: 0 2px;">
+      <div onClick="{{ goDashboard }}" onMouseenter="{{ dashMEnter }}" onMouseleave="{{ dashMLeave }}" style="{{ dashStyle }}">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M3 11l9-7 9 7v8a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z" fill="currentColor"></path></svg>
+        <span class="sb-nav-text">Dashboard</span>
+      </div>
+      <div onClick="{{ goProperties }}" onMouseenter="{{ propMEnter }}" onMouseleave="{{ propMLeave }}" style="{{ propStyle }}">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="14" rx="2" stroke="currentColor" stroke-width="1.8"></rect><path d="M3 14l4-4 3 3 4-5 7 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        <span class="sb-nav-text">Properties</span>
+      </div>
+      
+      
+      
+      
+    </nav>
+
+    
+    <nav style="display: flex; flex-direction: column; gap: 3px;">
+      
+      
+    </nav>
+
+    <div style="margin-top: auto; padding-top: 24px;">
+      
+    </div>
+  </aside>
+
+  <!-- ============ MAIN ============ -->
+  <main class="dc-main">
+   <sc-if value="{{ isDashboard }}" hint-placeholder-val="{{ true }}">
+    <!-- header -->
+    <header style="display: flex; align-items: center; gap: 18px; margin-bottom: 22px;">
+      <div style="flex: 1; min-width: 0;">
+        <div style="font-size: 17px; font-weight: 800;">Home</div>
+        <div style="font-size: 13px; color: #9AA0A6; margin-top: 3px;">"Track finances easily with AI insights and recommendations."</div>
+      </div>
+      <button onClick="{{ openForm }}" style="display: flex; align-items: center; gap: 7px; border: none; border-radius: 12px; padding: 11px 16px; background: #16261C; color: #FFFFFF; font-family: inherit; font-size: 13.5px; font-weight: 700; cursor: pointer; white-space: nowrap;"><span style="font-size: 15px;">＋</span> عقار جديد</button>
+      <div style="display: flex; align-items: center; width: 320px; background: #FFFFFF; border: 1px solid #ECECEC; border-radius: 12px; padding: 10px 12px; gap: 9px;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="#9AA0A6" stroke-width="1.8"></circle><path d="M20 20l-3.5-3.5" stroke="#9AA0A6" stroke-width="1.8" stroke-linecap="round"></path></svg>
+        <span style="flex: 1; font-size: 13px; color: #AEB2B6;">Search anything</span>
+        <span style="display:flex; gap:4px;">
+          <kbd style="background:#F1F2F2; border-radius:5px; padding:2px 6px; font-size:11px; color:#7A807D; font-family:inherit;">F</kbd>
+        </span>
+      </div>
+      <button style="width: 42px; height: 42px; border-radius: 12px; border: 1px solid #ECECEC; background: #FFFFFF; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3" stroke="#5C6360" stroke-width="1.7"></circle><path d="M12 3v2.5M12 18.5V21M21 12h-2.5M5.5 12H3M18.4 5.6l-1.8 1.8M7.4 16.6l-1.8 1.8M18.4 18.4l-1.8-1.8M7.4 7.4 5.6 5.6" stroke="#5C6360" stroke-width="1.7" stroke-linecap="round"></path></svg>
+      </button>
+      <button style="width: 42px; height: 42px; border-radius: 12px; border: 1px solid #ECECEC; background: #FFFFFF; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="#5C6360" stroke-width="1.7"></circle><path d="M9.5 9.5a2.5 2.5 0 1 1 3.2 2.4c-.7.3-.7.6-.7 1.1" stroke="#5C6360" stroke-width="1.7" stroke-linecap="round"></path><circle cx="12" cy="16.5" r="1" fill="#5C6360"></circle></svg>
+      </button>
+      <div style="width: 42px; height: 42px; border-radius: 50%; flex-shrink:0; background: linear-gradient(135deg,#7FCB45,#3F8F2E); color:#fff; font-size:14px; font-weight:700; display:flex; align-items:center; justify-content:center;">JW</div>
+    </header>
+
+    <!-- ROW 1 -->
+    <div class="dash-r1">
+      <!-- Total Balance -->
+      <div style="position: relative; overflow: hidden; border-radius: 20px; background: linear-gradient(135deg, #9BE05A 0%, #7FCB45 100%); padding: 20px; color: #16261C; min-height: 168px;">
+        <svg viewBox="0 0 320 200" preserveAspectRatio="none" style="position:absolute; inset:0; width:100%; height:100%; opacity:0.55;">
+          <circle cx="250" cy="40" r="120" fill="none" stroke="#B6EC86" stroke-width="22"></circle>
+          <circle cx="300" cy="120" r="90" fill="none" stroke="#8AD24E" stroke-width="26"></circle>
+          <circle cx="60" cy="180" r="80" fill="none" stroke="#A6E673" stroke-width="20"></circle>
+        </svg>
+        <div style="position: relative;">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+            <span style="font-size: 13.5px; font-weight: 600;">Total Balance</span>
+            <button style="width: 30px; height: 30px; border-radius: 50%; border: none; background: rgba(255,255,255,0.55); display: flex; align-items: center; justify-content: center; cursor: pointer;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="#16261C" stroke-width="2.2" stroke-linecap="round"></path></svg>
+            </button>
+          </div>
+          <div style="margin-top: 14px; font-size: 38px; font-weight: 800; letter-spacing: -1px;">$20,670 <span style="font-size: 15px; font-weight: 600; vertical-align: super;">USD</span></div>
+          <div style="display: flex; gap: 10px; margin-top: 26px;">
+            <button style="flex: 1; border: none; border-radius: 12px; padding: 12px; background: rgba(255,255,255,0.9); color: #16261C; font-family: inherit; font-weight: 700; font-size: 13.5px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;">Deposit <span>＋</span></button>
+            <button style="flex: 1; border: none; border-radius: 12px; padding: 12px; background: #16261C; color: #FFFFFF; font-family: inherit; font-weight: 700; font-size: 13.5px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;">Send <span>↗</span></button>
+          </div>
+        </div>
+      </div>
+
+      <!-- AI Enhancements -->
+      <div style="border-radius: 20px; background: #FFFFFF; border: 1px solid #ECECEC; padding: 20px;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <span style="font-size: 15px; font-weight: 700;">AI Enhancements</span>
+          <button style="border: 1px solid #E2E4E4; border-radius: 10px; padding: 8px 12px; background: #FFFFFF; font-family: inherit; font-size: 12.5px; font-weight: 600; color: #16261C; cursor: pointer; display: flex; align-items: center; gap: 6px;"><span style="font-size:14px;">＋</span> Add Enhancements</button>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-top: 18px;">
+          <div style="border: 1px solid #EEEFEF; border-radius: 14px; padding: 14px;">
+            <div style="display: flex; align-items: center; gap: 8px; color: #6B7280;">
+              <span style="width: 26px; height: 26px; border-radius: 50%; background: #EAF7E0; display: flex; align-items: center; justify-content: center;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M7 14l5-5 5 5" stroke="#5FB13B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg></span>
+              <span style="font-size: 12.5px;">Income</span>
+            </div>
+            <div style="margin-top: 14px; font-size: 19px; font-weight: 800;">$14,480.24</div>
+            <div style="margin-top: 6px; display: inline-flex; align-items: center; gap: 3px; font-size: 11px; font-weight: 700; color: #5FB13B; background: #EAF7E0; padding: 2px 7px; border-radius: 20px;">↑ 4.6%</div>
+          </div>
+          <div style="border: 1px solid #EEEFEF; border-radius: 14px; padding: 14px;">
+            <div style="display: flex; align-items: center; gap: 8px; color: #6B7280;">
+              <span style="width: 26px; height: 26px; border-radius: 50%; background: #EAF7E0; display: flex; align-items: center; justify-content: center;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M7 10l5 5 5-5" stroke="#5FB13B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg></span>
+              <span style="font-size: 12.5px;">Expense</span>
+            </div>
+            <div style="margin-top: 14px; font-size: 19px; font-weight: 800;">$14,480.24</div>
+            <div style="margin-top: 6px; display: inline-flex; align-items: center; gap: 3px; font-size: 11px; font-weight: 700; color: #5FB13B; background: #EAF7E0; padding: 2px 7px; border-radius: 20px;">↑ 4.6%</div>
+          </div>
+          <div style="border: 1px solid #EEEFEF; border-radius: 14px; padding: 14px;">
+            <div style="display: flex; align-items: center; gap: 8px; color: #6B7280;">
+              <span style="width: 26px; height: 26px; border-radius: 50%; background: #EAF7E0; display: flex; align-items: center; justify-content: center;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><rect x="4" y="6" width="16" height="12" rx="2" stroke="#5FB13B" stroke-width="1.8"></rect><path d="M4 10h16" stroke="#5FB13B" stroke-width="1.8"></path></svg></span>
+              <span style="font-size: 12.5px;">Savings</span>
+            </div>
+            <div style="margin-top: 14px; font-size: 19px; font-weight: 800;">$14,480.24</div>
+            <div style="margin-top: 6px; display: inline-flex; align-items: center; gap: 3px; font-size: 11px; font-weight: 700; color: #5FB13B; background: #EAF7E0; padding: 2px 7px; border-radius: 20px;">↑ 4.6%</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Finance Score -->
+      <div style="border-radius: 20px; background: #FFFFFF; border: 1px solid #ECECEC; padding: 20px;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <span style="font-size: 15px; font-weight: 700;">Finance Score</span>
+          <button style="width: 30px; height: 30px; border-radius: 9px; border: 1px solid #ECECEC; background: #FFFFFF; cursor: pointer; color:#9AA0A6;">⋯</button>
+        </div>
+        <div style="font-size: 12px; color: #9AA0A6; margin-top: 20px;">Finance Quality</div>
+        <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-top: 4px;">
+          <span style="font-size: 26px; font-weight: 800;">Excellent</span>
+          <span style="font-size: 24px; font-weight: 800;">92%</span>
+        </div>
+        <div style="display: flex; gap: 6px; margin-top: 18px;">
+          <div style="height: 30px; flex: 88; background: #16261C; border-radius: 8px;"></div>
+          <div style="height: 30px; flex: 12; background: #8BD850; border-radius: 8px;"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ROW 2 -->
+    <div class="dash-r2">
+      <!-- Cashflow -->
+      <div style="border-radius: 20px; background: #FFFFFF; border: 1px solid #ECECEC; padding: 20px;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <span style="font-size: 16px; font-weight: 700;">Cashflow</span>
+          <button style="border: 1px solid #E2E4E4; border-radius: 10px; padding: 8px 14px; background: #FFFFFF; font-family: inherit; font-size: 12.5px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px;">This Year <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="#5C6360" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"></path></svg></button>
+        </div>
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-top: 14px;">
+          <div>
+            <div style="font-size: 12px; color: #9AA0A6;">Total Balance</div>
+            <div style="font-size: 30px; font-weight: 800; margin-top: 2px;">$562,000</div>
+          </div>
+          <div style="display: flex; gap: 18px; align-items: center;">
+            <span style="display: flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 600;"><span style="width: 9px; height: 9px; border-radius: 3px; background: #16261C;"></span> Income</span>
+            <span style="display: flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 600;"><span style="width: 9px; height: 9px; border-radius: 3px; background: #8BD850;"></span> Expense</span>
+          </div>
+        </div>
+        <div style="margin-top: 6px;">{{ barChart }}</div>
+      </div>
+
+      <!-- AI Assistant -->
+      <div style="border-radius: 20px; background: #FFFFFF; border: 1px solid #ECECEC; padding: 20px; display: flex; flex-direction: column;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <span style="font-size: 16px; font-weight: 700;">AI Assistant</span>
+          <button style="width: 30px; height: 30px; border-radius: 9px; border: 1px solid #ECECEC; background: #FFFFFF; cursor: pointer; color:#9AA0A6;">⋮</button>
+        </div>
+        <div style="text-align: center; margin: 14px 0 10px;">
+          <div style="width: 96px; height: 96px; border-radius: 50%; margin: 0 auto; background: radial-gradient(circle at 62% 42%, #DFF3CF 0%, #8BD850 28%, #3F8F2E 62%, #16261C 100%);"></div>
+          <div style="font-size: 19px; font-weight: 700; margin-top: 16px;">What Can I help with?</div>
+        </div>
+        <div style="display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 4px;">
+          <span style="border: 1px solid #ECECEC; border-radius: 20px; padding: 6px 12px; font-size: 11.5px; color: #5C6360;">⊹ Show me my cash flow</span>
+          <span style="border: 1px solid #ECECEC; border-radius: 20px; padding: 6px 12px; font-size: 11.5px; color: #5C6360;">⊹ Help me set a savings goal</span>
+          <span style="border: 1px solid #ECECEC; border-radius: 20px; padding: 6px 12px; font-size: 11.5px; color: #5C6360;">⊹ Forecast my balance</span>
+          <span style="border: 1px solid #ECECEC; border-radius: 20px; padding: 6px 12px; font-size: 11.5px; color: #5C6360;">⊹ Plan my monthly budget</span>
+          <span style="border: 1px solid #ECECEC; border-radius: 20px; padding: 6px 12px; font-size: 11.5px; color: #5C6360;">⊹ Detect unusual transactions</span>
+          <span style="border: 1px solid #ECECEC; border-radius: 20px; padding: 6px 12px; font-size: 11.5px; color: #5C6360;">Others</span>
+        </div>
+        <div style="margin-top: auto; padding-top: 20px;">
+          <div style="border: 1px solid #ECECEC; border-radius: 16px; padding: 14px;">
+            <div style="display: flex; align-items: center; gap: 8px; color: #AEB2B6; font-size: 13.5px;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M4 20l4-1 9.5-9.5a2 2 0 0 0 0-2.8l-.2-.2a2 2 0 0 0-2.8 0L5 16l-1 4z" stroke="#AEB2B6" stroke-width="1.7" stroke-linejoin="round"></path></svg>
+              Ask anything...
+            </div>
+            <div style="display: flex; align-items: center; margin-top: 16px;">
+              <div style="display: flex; gap: 8px;">
+                <span style="border: 1px solid #ECECEC; border-radius: 18px; padding: 6px 12px; font-size: 12px; color: #5C6360;">Finance</span>
+                <span style="border: 1px solid #ECECEC; border-radius: 18px; padding: 6px 12px; font-size: 12px; color: #5C6360; display:flex; align-items:center; gap:6px;">Choose Model <svg width="11" height="11" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="#5C6360" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"></path></svg></span>
+              </div>
+              <div style="margin-left: auto; display: flex; align-items: center; gap: 10px;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="8" stroke="#AEB2B6" stroke-width="1.6"></circle><path d="M12 8v8M8 12h8" stroke="#AEB2B6" stroke-width="1.6" stroke-linecap="round"></path></svg>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M21 12.5l-8.5 8.5a5 5 0 0 1-7-7l9-9a3.3 3.3 0 0 1 4.7 4.7l-9 9a1.6 1.6 0 0 1-2.3-2.3l8.2-8.2" stroke="#AEB2B6" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                <button style="border: none; border-radius: 20px; padding: 9px 18px; background: #8BD850; color: #16261C; font-family: inherit; font-size: 13px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 6px;">↑ Send</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ROW 3 -->
+    <div class="dash-r3">
+      <!-- Recent Transactions -->
+      <div style="border-radius: 20px; background: #FFFFFF; border: 1px solid #ECECEC; padding: 20px;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <span style="font-size: 16px; font-weight: 700;">Recent Transactions</span>
+          <div style="display: flex; gap: 10px; align-items: center;">
+            <button style="border: 1px solid #E2E4E4; border-radius: 10px; padding: 8px 14px; background: #FFFFFF; font-family: inherit; font-size: 12.5px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px;">This Month <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="#5C6360" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"></path></svg></button>
+            <button style="width: 36px; height: 36px; border-radius: 10px; border: 1px solid #E2E4E4; background: #FFFFFF; cursor: pointer; display:flex; align-items:center; justify-content:center;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M4 7h16M7 12h10M10 17h4" stroke="#5C6360" stroke-width="1.8" stroke-linecap="round"></path></svg></button>
+          </div>
+        </div>
+        <div style="display: grid; grid-template-columns: 1.5fr 1.6fr 1fr 0.9fr 0.9fr; gap: 8px; padding: 16px 4px 12px; border-bottom: 1px solid #F0F0F0; font-size: 11.5px; color: #AEB2B6; font-weight: 600;">
+          <div>Transaction Name ⇅</div><div>Account ⇅</div><div>Date &amp; Time ⇅</div><div>Amount ⇅</div><div>Status ⇅</div>
+        </div>
+        {{ txnRows }}
+      </div>
+
+      <!-- Statistic -->
+      <div style="border-radius: 20px; background: #FFFFFF; border: 1px solid #ECECEC; padding: 20px;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <span style="font-size: 16px; font-weight: 700;">Statistic</span>
+          <button style="border: 1px solid #E2E4E4; border-radius: 10px; padding: 8px 14px; background: #FFFFFF; font-family: inherit; font-size: 12.5px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px;">This Month <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="#5C6360" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"></path></svg></button>
+        </div>
+        <div style="display: flex; gap: 6px; margin-top: 18px; border-bottom: 1px solid #F0F0F0;">
+          <div style="flex: 1; text-align: center; padding-bottom: 12px; font-size: 13px; color: #9AA0A6;">Income <span style="color:#C4C9CD;">($4,800)</span></div>
+          <div style="flex: 1; text-align: center; padding-bottom: 12px; font-size: 13px; font-weight: 700; border-bottom: 2.5px solid #8BD850; margin-bottom: -1.5px;">Expense <span style="color:#9AA0A6; font-weight:500;">($3,500)</span></div>
+        </div>
+        <div style="display: flex; justify-content: center; margin: 18px 0;">{{ donutChart }}</div>
+        <div style="display: flex; flex-direction: column; gap: 12px;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span style="width: 34px; height: 24px; border-radius: 7px; background: #16261C; color: #fff; font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center;">60%</span>
+            <span style="flex: 1; font-size: 13px; color: #5C6360;">Rent &amp; Living</span>
+            <span style="font-size: 13.5px; font-weight: 700;">$2,100</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span style="width: 34px; height: 24px; border-radius: 7px; background: #6FBE3A; color: #fff; font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center;">15%</span>
+            <span style="flex: 1; font-size: 13px; color: #5C6360;">Investment</span>
+            <span style="font-size: 13.5px; font-weight: 700;">$525</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span style="width: 34px; height: 24px; border-radius: 7px; background: #B7E68C; color: #16261C; font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center;">12%</span>
+            <span style="flex: 1; font-size: 13px; color: #5C6360;">Education</span>
+            <span style="font-size: 13.5px; font-weight: 700;">$420</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Exchange -->
+      <div style="border-radius: 20px; background: #FFFFFF; border: 1px solid #ECECEC; padding: 20px; display: flex; flex-direction: column;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <span style="font-size: 16px; font-weight: 700;">Exchange</span>
+          <button style="border: 1px solid #E2E4E4; border-radius: 10px; padding: 8px 14px; background: #FFFFFF; font-family: inherit; font-size: 12.5px; font-weight: 600; cursor: pointer;">Currencies</button>
+        </div>
+        <div style="border: 1px solid #EEEFEF; border-radius: 16px; padding: 16px; margin-top: 16px;">
+          <div style="text-align: center; font-size: 12.5px; color: #9AA0A6;">1 USD = 0.77 GBP</div>
+          <div style="display: flex; align-items: center; gap: 10px; margin-top: 14px;">
+            <div style="flex: 1; border: 1px solid #E2E4E4; border-radius: 11px; padding: 9px 12px; display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600;"><span style="font-size:15px;">🇺🇸</span> USD <svg width="11" height="11" viewBox="0 0 24 24" fill="none" style="margin-left:auto;"><path d="M6 9l6 6 6-6" stroke="#5C6360" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"></path></svg></div>
+            <button style="width: 36px; height: 36px; border-radius: 50%; border: 1px solid #E2E4E4; background: #FFFFFF; cursor: pointer; display:flex; align-items:center; justify-content:center;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M7 8h11l-3-3M17 16H6l3 3" stroke="#6FBE3A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path></svg></button>
+            <div style="flex: 1; border: 1px solid #E2E4E4; border-radius: 11px; padding: 9px 12px; display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600;"><span style="font-size:15px;">🇬🇧</span> GBP <svg width="11" height="11" viewBox="0 0 24 24" fill="none" style="margin-left:auto;"><path d="M6 9l6 6 6-6" stroke="#5C6360" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"></path></svg></div>
+          </div>
+          <div style="text-align: center; margin-top: 18px;">
+            <div style="font-size: 30px; font-weight: 800;">$100.00</div>
+            <div style="font-size: 12.5px; color: #9AA0A6; margin-top: 4px;">Available: $1600.86</div>
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 4px; border: 1px solid #EEEFEF; border-radius: 12px; padding: 12px; margin-top: 16px;">
+            <div><div style="font-size: 10.5px; color: #9AA0A6;">Tax (2%)</div><div style="font-size: 14px; font-weight: 700; margin-top: 4px;">$2.00</div></div>
+            <div><div style="font-size: 10.5px; color: #9AA0A6;">Exchange fee (1%)</div><div style="font-size: 14px; font-weight: 700; margin-top: 4px;">$1.00</div></div>
+            <div><div style="font-size: 10.5px; color: #9AA0A6;">Total amount</div><div style="font-size: 14px; font-weight: 700; margin-top: 4px;">€90.7</div></div>
+          </div>
+        </div>
+        <button style="margin-top: auto; margin-top: 16px; border: none; border-radius: 14px; padding: 15px; background: #8BD850; color: #16261C; font-family: inherit; font-size: 14.5px; font-weight: 700; cursor: pointer;">Exchange</button>
+      </div>
+    </div>
+   </sc-if>
+
+   <!-- ============ PROPERTIES PAGE ============ -->
+   <sc-if value="{{ isProperties }}" hint-placeholder-val="{{ false }}">
+    <div dir="rtl" style="font-family: 'Plus Jakarta Sans', sans-serif;">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 26px;">
+        <div>
+          <div style="font-size: 13px; color: #9AA0A6; display: flex; align-items: center; gap: 6px;"><span style="font-size:15px;">←</span> تطبيق العقارات</div>
+          <div style="font-size: 28px; font-weight: 800; margin-top: 7px;">العقارات</div>
+        </div>
+        <div style="display: flex; gap: 10px;">
+          <button onClick="{{ openForm }}" style="display: flex; align-items: center; gap: 7px; border: none; border-radius: 12px; padding: 11px 18px; background: #16261C; color: #FFFFFF; font-family: inherit; font-size: 13.5px; font-weight: 700; cursor: pointer;"><span style="font-size: 15px;">＋</span> عقار جديد</button>
+          <button style="display: flex; align-items: center; gap: 7px; border: 1px solid #ECECEC; border-radius: 12px; padding: 11px 16px; background: #FFFFFF; color: #16261C; font-family: inherit; font-size: 13.5px; font-weight: 600; cursor: pointer;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 16V4m0 12l-4-4m4 4l4-4" stroke="#5FB13B" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path><path d="M4 18v1a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-1" stroke="#5FB13B" stroke-width="1.8" stroke-linecap="round"></path></svg> استيراد</button>
+          <button style="display: flex; align-items: center; gap: 7px; border: 1px solid #ECECEC; border-radius: 12px; padding: 11px 16px; background: #FFFFFF; color: #16261C; font-family: inherit; font-size: 13.5px; font-weight: 600; cursor: pointer;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 4v12m0-12l-4 4m4-4l4 4" stroke="#3B82C4" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path><path d="M4 18v1a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-1" stroke="#3B82C4" stroke-width="1.8" stroke-linecap="round"></path></svg> تصدير</button>
+        </div>
+      </div>
+
+      <!-- filters -->
+      <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; margin-bottom: 24px;">
+        <div style="display: flex; align-items: center; gap: 9px; background: #FFFFFF; border: 1px solid #ECECEC; border-radius: 12px; padding: 12px 14px;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="#9AA0A6" stroke-width="1.8"></circle><path d="M20 20l-3.5-3.5" stroke="#9AA0A6" stroke-width="1.8" stroke-linecap="round"></path></svg>
+          <input type="text" onInput="{{ onSearch }}" value="{{ q }}" placeholder="بحث بالاسم أو المدينة أو المرجع" style="flex: 1; border: none; outline: none; background: transparent; font-family: inherit; font-size: 13.5px; color: #16261C; text-align: right;">
+        </div>
+        <div style="position: relative;">
+          <select onChange="{{ onFType }}" value="{{ fType }}" style="width: 100%; padding: 12px 14px; border: 1px solid #ECECEC; border-radius: 12px; font-family: inherit; font-size: 13.5px; color: #16261C; background: #fff; text-align: right; outline: none; appearance: none; -webkit-appearance: none; cursor: pointer;">
+            <option value="">كل أنواع العرض</option><option value="بيع">بيع</option><option value="إيجار">إيجار</option>
+          </select>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%); pointer-events: none;"><path d="M6 9l6 6 6-6" stroke="#5C6360" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        </div>
+        <div style="position: relative;">
+          <select onChange="{{ onFStatus }}" value="{{ fStatus }}" style="width: 100%; padding: 12px 14px; border: 1px solid #ECECEC; border-radius: 12px; font-family: inherit; font-size: 13.5px; color: #16261C; background: #fff; text-align: right; outline: none; appearance: none; -webkit-appearance: none; cursor: pointer;">
+            <option value="">كل الحالات</option><option value="مسودة">مسودة</option><option value="متاح">متاح</option><option value="محجوز">محجوز</option><option value="مباع">مباع</option><option value="مؤجر">مؤجر</option>
+          </select>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%); pointer-events: none;"><path d="M6 9l6 6 6-6" stroke="#5C6360" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        </div>
+      </div>
+
+      <!-- grid -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 18px;">{{ propCards }}</div>
+      <sc-if value="{{ noProps }}" hint-placeholder-val="{{ false }}">
+        <div style="text-align: center; padding: 70px 20px; color: #9AA0A6;">
+          <div style="font-size: 46px;">🏠</div>
+          <div style="font-size: 15px; font-weight: 600; margin-top: 12px; color: #5C6360;">لا توجد عقارات مطابقة</div>
+          <div style="font-size: 13px; margin-top: 4px;">أضف عقارًا جديدًا أو عدّل عوامل التصفية</div>
+        </div>
+      </sc-if>
+    </div>
+   </sc-if>
+  </main>
+
+  <!-- ============ NEW PROPERTY FORM MODAL ============ -->
+  <sc-if value="{{ showForm }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ closeForm }}" style="position: fixed; inset: 0; z-index: 1000; background: rgba(15,25,18,0.45); display: flex; align-items: flex-start; justify-content: center; overflow-y: auto; padding: 32px 16px;">
+      <div data-form-root="1" dir="rtl" onClick="{{ stop }}" style="width: 90%; max-width: 700px; background: #FFFFFF; border-radius: 22px; padding: 28px 30px; box-shadow: 0 30px 80px rgba(0,0,0,0.3); font-family: 'Plus Jakarta Sans', sans-serif;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 22px;">
+          <span style="font-size: 22px; font-weight: 800;">{{ formTitle }}</span>
+          <button onClick="{{ closeForm }}" style="width: 34px; height: 34px; border-radius: 10px; border: 1px solid #ECECEC; background: #FFFFFF; cursor: pointer; font-size: 16px; color: #5C6360;">✕</button>
+        </div>
+
+        <!-- عنوان العقار -->
+        <div>
+          <label style="display: block; text-align: right; font-size: 13px; color: #5C6360; margin-bottom: 8px; font-weight: 500;">عنوان العقار <span style="color: #E5484D;">*</span></label>
+          <input type="text" data-f="title" style="width: 100%; padding: 12px 14px; border: 1px solid #ECECEC; border-radius: 12px; font-family: inherit; font-size: 14px; color: #16261C; background: #fff; text-align: right; outline: none; box-sizing: border-box;">
+        </div>
+
+        <!-- نوع العرض / نوع العقار -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px;">
+          <div>
+            <label style="display: block; text-align: right; font-size: 13px; color: #5C6360; margin-bottom: 8px; font-weight: 500;">نوع العرض</label>
+            <div style="position: relative;">
+              <select data-f="offer" defaultValue="بيع" style="width: 100%; padding: 12px 14px; border: 1px solid #ECECEC; border-radius: 12px; font-family: inherit; font-size: 14px; color: #16261C; background: #fff; text-align: right; outline: none; appearance: none; -webkit-appearance: none; box-sizing: border-box;">
+                <option value="بيع">بيع</option><option value="إيجار">إيجار</option>
+              </select>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%); pointer-events: none;"><path d="M6 9l6 6 6-6" stroke="#5C6360" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+            </div>
+          </div>
+          <div>
+            <label style="display: block; text-align: right; font-size: 13px; color: #5C6360; margin-bottom: 8px; font-weight: 500;">نوع العقار</label>
+            <div style="position: relative;">
+              <select data-f="type" defaultValue="شقة" style="width: 100%; padding: 12px 14px; border: 1px solid #ECECEC; border-radius: 12px; font-family: inherit; font-size: 14px; color: #16261C; background: #fff; text-align: right; outline: none; appearance: none; -webkit-appearance: none; box-sizing: border-box;">
+                <option value="شقة">شقة</option><option value="فيلا">فيلا</option><option value="أرض">أرض</option><option value="مكتب">مكتب</option><option value="عمارة">عمارة</option>
+              </select>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%); pointer-events: none;"><path d="M6 9l6 6 6-6" stroke="#5C6360" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- الحالة / رقم مرجعي -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px;">
+          <div>
+            <label style="display: block; text-align: right; font-size: 13px; color: #5C6360; margin-bottom: 8px; font-weight: 500;">الحالة</label>
+            <div style="position: relative;">
+              <select data-f="status" defaultValue="متاح" style="width: 100%; padding: 12px 14px; border: 1px solid #ECECEC; border-radius: 12px; font-family: inherit; font-size: 14px; color: #16261C; background: #fff; text-align: right; outline: none; appearance: none; -webkit-appearance: none; box-sizing: border-box;">
+                <option value="مسودة">مسودة</option><option value="متاح">متاح</option><option value="محجوز">محجوز</option><option value="مباع">مباع</option><option value="مؤجر">مؤجر</option>
+              </select>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%); pointer-events: none;"><path d="M6 9l6 6 6-6" stroke="#5C6360" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+            </div>
+          </div>
+          <div>
+            <label style="display: block; text-align: right; font-size: 13px; color: #5C6360; margin-bottom: 8px; font-weight: 500;">رقم مرجعي</label>
+            <input type="text" data-f="ref" style="width: 100%; padding: 12px 14px; border: 1px solid #ECECEC; border-radius: 12px; font-family: inherit; font-size: 14px; color: #16261C; background: #fff; text-align: right; outline: none; box-sizing: border-box;">
+          </div>
+        </div>
+
+        <!-- المدينة / الحي -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px;">
+          <div>
+            <label style="display: block; text-align: right; font-size: 13px; color: #5C6360; margin-bottom: 8px; font-weight: 500;">المدينة</label>
+            <input type="text" data-f="city" defaultValue="الرياض" style="width: 100%; padding: 12px 14px; border: 1px solid #ECECEC; border-radius: 12px; font-family: inherit; font-size: 14px; color: #16261C; background: #fff; text-align: right; outline: none; box-sizing: border-box;">
+          </div>
+          <div>
+            <label style="display: block; text-align: right; font-size: 13px; color: #5C6360; margin-bottom: 8px; font-weight: 500;">الحي</label>
+            <input type="text" data-f="district" style="width: 100%; padding: 12px 14px; border: 1px solid #ECECEC; border-radius: 12px; font-family: inherit; font-size: 14px; color: #16261C; background: #fff; text-align: right; outline: none; box-sizing: border-box;">
+          </div>
+        </div>
+
+        <!-- العنوان -->
+        <div style="margin-top: 16px;">
+          <label style="display: block; text-align: right; font-size: 13px; color: #5C6360; margin-bottom: 8px; font-weight: 500;">العنوان</label>
+          <input type="text" data-f="address" style="width: 100%; padding: 12px 14px; border: 1px solid #ECECEC; border-radius: 12px; font-family: inherit; font-size: 14px; color: #16261C; background: #fff; text-align: right; outline: none; box-sizing: border-box;">
+        </div>
+
+        <!-- الموقع على الخريطة -->
+        <div style="margin-top: 18px; display: flex; justify-content: space-between; align-items: center;">
+          <span style="font-size: 13px; color: #5C6360; font-weight: 500;">الموقع على الخريطة (اختياري)</span>
+          <span style="display: inline-flex; align-items: center; gap: 5px; font-size: 13px; color: #5FB13B; font-weight: 600; cursor: pointer;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M12 21s7-6.3 7-11a7 7 0 1 0-14 0c0 4.7 7 11 7 11z" stroke="#5FB13B" stroke-width="1.8"></path><circle cx="12" cy="10" r="2.4" stroke="#5FB13B" stroke-width="1.8"></circle></svg> تحديد على الخريطة</span>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 10px;">
+          <input type="text" data-f="lat" placeholder="خط العرض (lat)" style="width: 100%; padding: 12px 14px; border: 1px solid #ECECEC; border-radius: 12px; font-family: inherit; font-size: 14px; color: #16261C; background: #fff; text-align: right; outline: none; box-sizing: border-box;">
+          <input type="text" data-f="lng" placeholder="خط الطول (lng)" style="width: 100%; padding: 12px 14px; border: 1px solid #ECECEC; border-radius: 12px; font-family: inherit; font-size: 14px; color: #16261C; background: #fff; text-align: right; outline: none; box-sizing: border-box;">
+        </div>
+
+        <!-- السعر / العملة -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px;">
+          <div>
+            <label style="display: block; text-align: right; font-size: 13px; color: #5C6360; margin-bottom: 8px; font-weight: 500;">السعر</label>
+            <input type="number" data-f="price" defaultValue="0" style="width: 100%; padding: 12px 14px; border: 1px solid #ECECEC; border-radius: 12px; font-family: inherit; font-size: 14px; color: #16261C; background: #fff; text-align: right; outline: none; box-sizing: border-box;">
+          </div>
+          <div>
+            <label style="display: block; text-align: right; font-size: 13px; color: #5C6360; margin-bottom: 8px; font-weight: 500;">العملة</label>
+            <div style="position: relative;">
+              <select data-f="currency" defaultValue="SAR" style="width: 100%; padding: 12px 14px; border: 1px solid #ECECEC; border-radius: 12px; font-family: inherit; font-size: 14px; color: #16261C; background: #fff; text-align: right; outline: none; appearance: none; -webkit-appearance: none; box-sizing: border-box;">
+                <option value="SAR">SAR</option><option value="USD">USD</option><option value="EUR">EUR</option>
+              </select>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%); pointer-events: none;"><path d="M6 9l6 6 6-6" stroke="#5C6360" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- المساحة / غرف النوم -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px;">
+          <div>
+            <label style="display: block; text-align: right; font-size: 13px; color: #5C6360; margin-bottom: 8px; font-weight: 500;">المساحة م²</label>
+            <input type="number" data-f="area" style="width: 100%; padding: 12px 14px; border: 1px solid #ECECEC; border-radius: 12px; font-family: inherit; font-size: 14px; color: #16261C; background: #fff; text-align: right; outline: none; box-sizing: border-box;">
+          </div>
+          <div>
+            <label style="display: block; text-align: right; font-size: 13px; color: #5C6360; margin-bottom: 8px; font-weight: 500;">غرف النوم</label>
+            <input type="number" data-f="beds" style="width: 100%; padding: 12px 14px; border: 1px solid #ECECEC; border-radius: 12px; font-family: inherit; font-size: 14px; color: #16261C; background: #fff; text-align: right; outline: none; box-sizing: border-box;">
+          </div>
+        </div>
+
+        <!-- دورات المياه / مواقف -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px;">
+          <div>
+            <label style="display: block; text-align: right; font-size: 13px; color: #5C6360; margin-bottom: 8px; font-weight: 500;">دورات المياه</label>
+            <input type="number" data-f="baths" style="width: 100%; padding: 12px 14px; border: 1px solid #ECECEC; border-radius: 12px; font-family: inherit; font-size: 14px; color: #16261C; background: #fff; text-align: right; outline: none; box-sizing: border-box;">
+          </div>
+          <div>
+            <label style="display: block; text-align: right; font-size: 13px; color: #5C6360; margin-bottom: 8px; font-weight: 500;">مواقف</label>
+            <input type="number" data-f="parking" style="width: 100%; padding: 12px 14px; border: 1px solid #ECECEC; border-radius: 12px; font-family: inherit; font-size: 14px; color: #16261C; background: #fff; text-align: right; outline: none; box-sizing: border-box;">
+          </div>
+        </div>
+
+        <!-- الوصف -->
+        <div style="margin-top: 16px;">
+          <label style="display: block; text-align: right; font-size: 13px; color: #5C6360; margin-bottom: 8px; font-weight: 500;">الوصف</label>
+          <textarea data-f="description" rows="4" style="width: 100%; padding: 12px 14px; border: 1px solid #ECECEC; border-radius: 12px; font-family: inherit; font-size: 14px; color: #16261C; background: #fff; text-align: right; outline: none; resize: vertical; box-sizing: border-box;"></textarea>
+        </div>
+
+        <!-- صور العقار -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 18px; margin-bottom: 10px;">
+          <span style="display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: #5C6360; font-weight: 500;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="14" rx="2.5" stroke="#5C6360" stroke-width="1.7"></rect><circle cx="8.5" cy="10" r="1.6" stroke="#5C6360" stroke-width="1.5"></circle><path d="M4 17l5-4 4 3 3-2 4 3" stroke="#5C6360" stroke-width="1.7" stroke-linejoin="round"></path></svg> صور العقار</span>
+          <span style="font-size: 12px; color: #9AA0A6;">{{ imgCount }} / 10</span>
+        </div>
+        <label onDrop="{{ onDrop }}" onDragOver="{{ onDragOver }}" onDragLeave="{{ onDragLeave }}" style="{{ dropStyle }}">
+          <input type="file" accept="image/jpeg,image/png,image/webp" multiple="" onChange="{{ onImgChange }}" style="display: none;">
+          <div style="display: flex; justify-content: center;"><svg width="34" height="34" viewBox="0 0 24 24" fill="none"><path d="M12 16V7m0 0l-3.5 3.5M12 7l3.5 3.5" stroke="#5FB13B" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path><path d="M4 15v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3" stroke="#5FB13B" stroke-width="1.8" stroke-linecap="round"></path></svg></div>
+          <div style="font-weight: 700; font-size: 14px; margin-top: 10px; color: #16261C;">اسحب الصور هنا أو اضغط للاختيار</div>
+          <div style="font-size: 12px; color: #9AA0A6; margin-top: 4px;">JPG/PNG/WEBP · حتى 10 صور · حد أقصى 5MB لكل صورة</div>
+        </label>
+        {{ imgThumbs }}
+
+        <!-- المميزات -->
+        <div style="margin-top: 18px;">
+          <label style="display: block; text-align: right; font-size: 13px; color: #5C6360; margin-bottom: 8px; font-weight: 500;">المميزات، كل ميزة في سطر</label>
+          <textarea data-f="features" rows="3" style="width: 100%; padding: 12px 14px; border: 1px solid #ECECEC; border-radius: 12px; font-family: inherit; font-size: 14px; color: #16261C; background: #fff; text-align: right; outline: none; resize: vertical; box-sizing: border-box;"></textarea>
+        </div>
+
+        <!-- رقم التواصل / checkboxes -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px; align-items: end;">
+          <div>
+            <label style="display: block; text-align: right; font-size: 13px; color: #5C6360; margin-bottom: 8px; font-weight: 500;">رقم التواصل</label>
+            <input type="text" data-f="phone" style="width: 100%; padding: 12px 14px; border: 1px solid #ECECEC; border-radius: 12px; font-family: inherit; font-size: 14px; color: #16261C; background: #fff; text-align: right; outline: none; box-sizing: border-box;">
+          </div>
+          <div style="display: flex; align-items: center; gap: 18px; justify-content: flex-start; padding-bottom: 12px;">
+            <label style="display: flex; align-items: center; gap: 7px; font-size: 13px; color: #16261C; cursor: pointer;"><input type="checkbox" data-f="furnished" style="width: 16px; height: 16px; accent-color: #5FB13B;"> مفروش</label>
+            <label style="display: flex; align-items: center; gap: 7px; font-size: 13px; color: #16261C; cursor: pointer;"><input type="checkbox" data-f="published" defaultchecked="" style="width: 16px; height: 16px; accent-color: #5FB13B;"> منشور</label>
+            <label style="display: flex; align-items: center; gap: 7px; font-size: 13px; color: #16261C; cursor: pointer;"><input type="checkbox" data-f="featured" style="width: 16px; height: 16px; accent-color: #5FB13B;"> مميز</label>
+          </div>
+        </div>
+
+        <!-- footer -->
+        <div style="display: flex; gap: 14px; align-items: center; margin-top: 26px; border-top: 1px solid #F0F0F0; padding-top: 20px;">
+          <button onClick="{{ saveProp }}" style="flex: 1; border: none; border-radius: 14px; padding: 14px; background: #8BD850; color: #16261C; font-family: inherit; font-size: 14.5px; font-weight: 700; cursor: pointer;">{{ saveLabel }}</button>
+          <button onClick="{{ closeForm }}" style="border: 1px solid #ECECEC; border-radius: 14px; padding: 14px 24px; background: #FFFFFF; color: #5C6360; font-family: inherit; font-size: 14px; font-weight: 600; cursor: pointer;">إلغاء</button>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = {
+    page: 'dashboard', showForm: false, images: [], dragOver: false, editId: null,
+    fType: '', fStatus: '', q: '',
+    props: []
+  };
+
+  componentDidMount() {
+    fetch('/api/properties')
+      .then(r => r.json())
+      .then(a => { if (Array.isArray(a)) this.setState({ props: a }); })
+      .catch(() => {});
+  }
+
+  componentDidUpdate(_props, prev) {
+    // DCLogic ignores setState callbacks, so we use componentDidUpdate
+    // to initialize form fields whenever the form transitions from hidden → visible
+    if (this.state.showForm && !prev.showForm) {
+      if (this.state.editId) this.populate();
+      else this.resetForm();
+    }
+  }
+
+  goDashboard = () => this.setState({ page: 'dashboard' });
+  goProperties = () => this.setState({ page: 'properties' });
+
+  openForm = () => { this._draft = null; this.setState({ editId: null, showForm: true, images: [] }, () => this.resetForm()); };
+  openEdit = (p) => { this._draft = p; this.setState({ editId: p.id, showForm: true, images: (p.images || []).slice() }, () => this.populate()); };
+  closeForm = () => this.setState({ showForm: false, editId: null });
+  stop = (e) => e.stopPropagation();
+
+  handleFiles = (fileList) => {
+    const allowed = ['image/jpeg', 'image/png', 'image/webp'];
+    const files = [].slice.call(fileList || []).filter(f =>
+      allowed.indexOf(f.type) !== -1 && f.size <= 5 * 1024 * 1024
+    );
+    if (!files.length) return;
+    const remaining = 10 - this.state.images.length;
+    if (remaining <= 0) return;
+    const fd = new FormData();
+    files.slice(0, remaining).forEach(f => fd.append('images', f));
+    fetch('/api/upload', { method: 'POST', body: fd })
+      .then(r => r.json())
+      .then(data => {
+        if (data.urls) this.setState({ images: this.state.images.concat(data.urls).slice(0, 10) });
+      })
+      .catch(() => {});
+  };
+  onImgChange = (e) => { this.handleFiles(e.target.files); e.target.value = ''; };
+  onDrop = (e) => { e.preventDefault(); this.setState({ dragOver: false }); this.handleFiles(e.dataTransfer.files); };
+  onDragOver = (e) => { e.preventDefault(); if (!this.state.dragOver) this.setState({ dragOver: true }); };
+  onDragLeave = (e) => { e.preventDefault(); this.setState({ dragOver: false }); };
+  removeImg = (i) => {
+    const url = this.state.images[i];
+    if (url) {
+      const filename = url.split('/').pop();
+      fetch('/api/upload/' + filename, { method: 'DELETE' }).catch(() => {});
+    }
+    this.setState({ images: this.state.images.filter((_, k) => k !== i) });
+  };
+
+  onSearch = (e) => this.setState({ q: e.target.value });
+  onFType   = (e) => { const v = e.target.value; this.setState({ fType:   (v === 'كل أنواع العرض') ? '' : v }); };
+  onFStatus = (e) => { const v = e.target.value; this.setState({ fStatus: (v === 'كل الحالات')     ? '' : v }); };
+
+  _formRoot() { return this._container && this._container.querySelector('[data-form-root="1"]'); }
+
+  resetForm() {
+    const root = this._formRoot(); if (!root) return;
+    root.querySelectorAll('[data-f]').forEach(el => {
+      const k = el.getAttribute('data-f');
+      if (el.type === 'checkbox') el.checked = (k === 'published');
+      else if (el.tagName === 'SELECT') el.selectedIndex = 0;
+      else el.value = (k === 'city') ? 'الرياض' : (k === 'price') ? '0' : '';
+    });
+  }
+  populate() {
+    const root = this._formRoot(), d = this._draft; if (!root || !d) return;
+    root.querySelectorAll('[data-f]').forEach(el => {
+      const k = el.getAttribute('data-f');
+      if (!(k in d)) return;
+      if (el.type === 'checkbox') el.checked = !!d[k];
+      else el.value = d[k];
+    });
+  }
+  readForm() {
+    const root = this._formRoot();
+    if (!root) { console.error('[readForm] form root not found', this._container); return {}; }
+    const o = {};
+    root.querySelectorAll('[data-f]').forEach(el => {
+      const k = el.getAttribute('data-f');
+      o[k] = el.type === 'checkbox' ? el.checked : el.value;
+    });
+    console.log('[readForm]', JSON.stringify(o));
+    return o;
+  }
+  saveProp = () => {
+    const f = this.readForm();
+    const body = {
+      title:       (f.title || '').trim() || 'عقار بدون عنوان',
+      offer:       f.offer       || 'بيع',
+      type:        f.type        || 'شقة',
+      status:      f.status      || 'متاح',
+      ref:         f.ref         || '',
+      city:        (f.city       || '').trim(),
+      district:    (f.district   || '').trim(),
+      address:     f.address     || '',
+      lat:         f.lat         || '',
+      lng:         f.lng         || '',
+      price:       Number(f.price)   || 0,
+      currency:    f.currency    || 'SAR',
+      area:        f.area ? Number(f.area) : 0,
+      beds:        Number(f.beds)    || 0,
+      baths:       Number(f.baths)   || 0,
+      parking:     Number(f.parking) || 0,
+      description: f.description || '',
+      features:    f.features    || '',
+      phone:       f.phone       || '',
+      furnished:   !!f.furnished,
+      published:   !!f.published,
+      featured:    !!f.featured,
+      images:      this.state.images.slice(0, 10)
+    };
+    const isEdit = !!this.state.editId;
+    const url    = isEdit ? '/api/properties/' + this.state.editId : '/api/properties';
+    const method = isEdit ? 'PUT' : 'POST';
+    console.log('[saveProp] body:', JSON.stringify(body, null, 2));
+    fetch(url, { method, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) })
+      .then(r => r.json())
+      .then(saved => {
+        const props = isEdit
+          ? this.state.props.map(p => p.id === saved.id ? saved : p)
+          : [saved, ...this.state.props];
+        this.setState({ props, showForm: false, editId: null, page: 'properties' });
+      })
+      .catch(() => {});
+  };
+  deleteProp = (id) => {
+    fetch('/api/properties/' + id, { method: 'DELETE' })
+      .then(() => { this.setState({ props: this.state.props.filter(p => p.id !== id) }); })
+      .catch(() => {});
+  };
+
+  renderVals() {
+    const R = React.createElement;
+
+    // ---------- BAR CHART ----------
+    const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    const data = [
+      {i:5.0,e:5.0},{i:3.6,e:7.2},{i:4.6,e:5.0},{i:6.6,e:2.6},
+      {i:4.2,e:4.2},{i:5.2,e:4.6},{i:3.2,e:3.6},{i:4.2,e:4.2},
+      {i:6.6,e:4.6},{i:5.2,e:4.6},{i:3.8,e:4.8},{i:4.6,e:4.2}
+    ];
+    const W = 640, H = 300, padL = 34, padB = 28, padT = 12;
+    const plotW = W - padL, plotTop = padT, plotBot = H - padB;
+    const zeroY = (plotTop + plotBot) / 2;
+    const scale = (plotBot - plotTop) / 16; // per K, range -8..8
+    const step = plotW / months.length;
+    const bw = 22;
+    const yTicks = [8,4,0,-4,-8];
+
+    const grid = yTicks.map((t,k) => {
+      const y = zeroY - t * scale;
+      return R('g', {key:'g'+k},
+        R('line', {x1:padL, y1:y, x2:W, y2:y, stroke:'#F0F1F1', strokeWidth:1}),
+        R('text', {x:padL-8, y:y+3, textAnchor:'end', fontSize:10, fill:'#AEB2B6', fontFamily:'Plus Jakarta Sans'}, (t>0?t:t)+'K')
+      );
+    });
+
+    const bars = data.map((d,k) => {
+      const cx = padL + step*k + step/2;
+      const x = cx - bw/2;
+      const incH = d.i * scale, expH = d.e * scale;
+      return R('g', {key:'b'+k},
+        R('rect', {x, y: zeroY-incH, width:bw, height:incH, rx:5, fill:'#16261C'}),
+        R('rect', {x, y: zeroY, width:bw, height:expH, rx:5, fill:'#8BD850'}),
+        R('text', {x:cx, y:H-8, textAnchor:'middle', fontSize:10.5, fill:'#9AA0A6', fontFamily:'Plus Jakarta Sans'}, months[k])
+      );
+    });
+
+    // tooltip on June (index 5)
+    const tCx = padL + step*5 + step/2;
+    const tooltip = R('g', {},
+      R('rect', {x:tCx-58, y:plotTop+6, width:128, height:62, rx:10, fill:'#fff', stroke:'#ECECEC'}),
+      R('text', {x:tCx-46, y:plotTop+26, fontSize:10.5, fill:'#9AA0A6', fontFamily:'Plus Jakarta Sans'}, 'June 2029'),
+      R('text', {x:tCx-46, y:plotTop+43, fontSize:10.5, fill:'#9AA0A6', fontFamily:'Plus Jakarta Sans'}, 'Income'),
+      R('text', {x:tCx+58, y:plotTop+43, fontSize:11, fill:'#16261C', fontWeight:700, textAnchor:'end', fontFamily:'Plus Jakarta Sans'}, '$6,000'),
+      R('text', {x:tCx-46, y:plotTop+59, fontSize:10.5, fill:'#9AA0A6', fontFamily:'Plus Jakarta Sans'}, 'Expense'),
+      R('text', {x:tCx+58, y:plotTop+59, fontSize:11, fill:'#16261C', fontWeight:700, textAnchor:'end', fontFamily:'Plus Jakarta Sans'}, '$4,000')
+    );
+
+    const barChart = R('svg', {viewBox:`0 0 ${W} ${H}`, style:{width:'100%', height:'auto', display:'block'}},
+      ...grid, ...bars, tooltip);
+
+    // ---------- DONUT CHART ----------
+    const segs = [
+      {p:60, c:'#16261C'},
+      {p:15, c:'#6FBE3A'},
+      {p:12, c:'#B7E68C'},
+      {p:8,  c:'#9AA29C'},
+      {p:5,  c:'#D7DAD7'}
+    ];
+    const r = 62, cxx = 90, cyy = 90, circ = 2*Math.PI*r;
+    let off = 0;
+    const ring = segs.map((s,k) => {
+      const len = s.p/100 * circ;
+      const el = R('circle', {
+        key:'s'+k, cx:cxx, cy:cyy, r, fill:'none', stroke:s.c, strokeWidth:24,
+        strokeDasharray:`${len} ${circ-len}`, strokeDashoffset:-off,
+        transform:`rotate(-90 ${cxx} ${cyy})`, strokeLinecap:'butt'
+      });
+      off += len;
+      return el;
+    });
+    const donutChart = R('svg', {width:180, height:180, viewBox:'0 0 180 180'},
+      ...ring,
+      R('text', {x:cxx, y:cyy-6, textAnchor:'middle', fontSize:11, fill:'#9AA0A6', fontFamily:'Plus Jakarta Sans'}, 'Total Expense'),
+      R('text', {x:cxx, y:cyy+18, textAnchor:'middle', fontSize:24, fontWeight:800, fill:'#16261C', fontFamily:'Plus Jakarta Sans'}, '$3,500')
+    );
+
+    // ---------- TRANSACTIONS ----------
+    const txns = [
+      {name:'Dividend Payout', sub:'Investments', card:'visa', acct:'Platinum Plus Visa', date:'2024-09-25', time:'10:00', amt:'+$200.00', amtColor:'#16261C', status:'Completed'},
+      {name:'Grocery Shopping', sub:'Food & Dining', card:'visa', acct:'Platinum Plus Visa', date:'2024-09-24', time:'14:30', amt:'-$154.20', amtColor:'#E5484D', status:'Completed'},
+      {name:'Freelance Payment', sub:'Income', card:'mc', acct:'Freedom Unlimited Mastercard', date:'2024-09-23', time:'15:00', amt:'+$850.00', amtColor:'#16261C', status:'Completed'},
+      {name:'Electricity Bill', sub:'Utilities', card:'mc', acct:'Freedom Unlimited Mastercard', date:'2024-09-22', time:'09:15', amt:'-$120.75', amtColor:'#E5484D', status:'Completed'},
+      {name:'Online Subscription', sub:'Services', card:'visa', acct:'Platinum Plus Visa', date:'2024-09-18', time:'08:00', amt:'-$12.99', amtColor:'#E5484D', status:'Pending'}
+    ];
+    const cardMark = (t) => t==='visa'
+      ? R('span', {style:{fontStyle:'italic', fontWeight:800, fontSize:12, color:'#1A1F71', letterSpacing:'-0.5px'}}, 'VISA')
+      : R('span', {style:{display:'inline-flex'}},
+          R('span', {style:{width:14,height:14,borderRadius:'50%',background:'#16261C',display:'inline-block'}}),
+          R('span', {style:{width:14,height:14,borderRadius:'50%',background:'#8BD850',display:'inline-block',marginLeft:-6}}));
+    const statusPill = (s) => R('span', {style:{
+        fontSize:11, fontWeight:700, padding:'4px 10px', borderRadius:20,
+        color: s==='Pending' ? '#E5484D' : '#5FB13B',
+        background: s==='Pending' ? '#FDECEC' : '#EAF7E0'}}, s);
+
+    const txnRows = txns.map((t,k) => R('div', {key:k, style:{
+        display:'grid', gridTemplateColumns:'1.5fr 1.6fr 1fr 0.9fr 0.9fr', gap:8,
+        alignItems:'center', padding:'13px 4px', borderBottom: k<txns.length-1 ? '1px solid #F4F4F4' : 'none'}},
+      R('div', {},
+        R('div', {style:{fontSize:13, fontWeight:700}}, t.name),
+        R('div', {style:{fontSize:11.5, color:'#9AA0A6', marginTop:2}}, t.sub)),
+      R('div', {style:{display:'flex', alignItems:'center', gap:8}},
+        cardMark(t.card),
+        R('span', {style:{fontSize:12.5, color:'#5C6360'}}, t.acct)),
+      R('div', {},
+        R('div', {style:{fontSize:12.5, fontWeight:700}}, t.date),
+        R('div', {style:{fontSize:11, color:'#9AA0A6', marginTop:2}}, t.time)),
+      R('div', {style:{fontSize:13, fontWeight:700, color:t.amtColor}}, t.amt),
+      R('div', {}, statusPill(t.status))
+    ));
+
+    // ---------- NAV STATE ----------
+    const activeCSS = 'display:flex;align-items:center;gap:12px;padding:11px 14px;border-radius:12px;background:#FFFFFF;box-shadow:0 1px 3px rgba(0,0,0,0.06);font-weight:700;font-size:14px;cursor:pointer;color:#16261C';
+    const idleCSS   = 'display:flex;align-items:center;gap:12px;padding:11px 14px;border-radius:12px;background:transparent;color:#5C6360;font-size:14px;font-weight:500;cursor:pointer';
+    const page = this.state.page;
+    const dashStyle = page === 'dashboard'   ? activeCSS : idleCSS;
+    const propStyle = page === 'properties'  ? activeCSS : idleCSS;
+
+    const _hIn  = (e) => { e.currentTarget.style.background = '#F4F5F5'; };
+    const _hOut = (e) => { e.currentTarget.style.background = 'transparent'; };
+    const _noop = () => {};
+    const dashMEnter = page === 'dashboard'  ? _noop : _hIn;
+    const dashMLeave = page === 'dashboard'  ? _noop : _hOut;
+    const propMEnter = page === 'properties' ? _noop : _hIn;
+    const propMLeave = page === 'properties' ? _noop : _hOut;
+
+    // ---------- PROPERTY CARDS ----------
+    const stc = { 'متاح':['#5FB13B','#EAF7E0'], 'محجوز':['#C98A1B','#FBF1DD'], 'مباع':['#E5484D','#FDECEC'], 'مؤجر':['#7A6FF0','#EDEBFD'], 'مسودة':['#7A807D','#F1F2F2'] };
+    const { props, fType, fStatus, q } = this.state;
+    const ql = (q || '').trim();
+    const showAllType   = !fType   || fType   === 'كل أنواع العرض';
+    const showAllStatus = !fStatus || fStatus === 'كل الحالات';
+    const filtered = props.filter(p =>
+      (showAllType   || p.offer  === fType) &&
+      (showAllStatus || p.status === fStatus) &&
+      (!ql || (p.title + ' ' + p.city + ' ' + p.district + ' ' + (p.ref || '')).indexOf(ql) !== -1)
+    );
+
+    const card = (p) => {
+      const sp = stc[p.status] || stc['متاح'];
+      return R('div', { key:p.id, style:{ background:'#fff', border:'1px solid #ECECEC', borderRadius:18, overflow:'hidden', display:'flex', flexDirection:'column' } },
+        R('div', { style:{ position:'relative', height:200, background:'#F4F5F5', display:'flex', alignItems:'center', justifyContent:'center', overflow:'hidden' } },
+          (p.images && p.images.length) ? R('img', { src:p.images[0], style:{ position:'absolute', inset:0, width:'100%', height:'100%', objectFit:'cover' } }) : null,
+          R('div', { style:{ position:'absolute', top:12, insetInlineEnd:12, background:'rgba(255,255,255,0.92)', borderRadius:20, padding:'4px 12px', fontSize:12, fontWeight:600, color:'#16261C' } }, p.offer + ' · ' + p.type),
+          p.published ? R('div', { style:{ position:'absolute', top:12, insetInlineStart:12, background:'#1F8A5B', color:'#fff', borderRadius:20, padding:'4px 12px', fontSize:11.5, fontWeight:700 } }, 'منشور') : null,
+          p.featured ? R('div', { style:{ position:'absolute', bottom:12, insetInlineStart:12, background:'#16261C', color:'#8BD850', borderRadius:20, padding:'4px 12px', fontSize:11, fontWeight:700 } }, '★ مميز') : null,
+          (p.images && p.images.length > 1) ? R('div', { style:{ position:'absolute', bottom:12, insetInlineEnd:12, background:'rgba(22,38,28,0.78)', color:'#fff', borderRadius:20, padding:'3px 10px', fontSize:11, fontWeight:600 } }, '📷 ' + p.images.length) : null,
+          (p.images && p.images.length) ? null : R('div', { style:{ fontSize:60 } }, '🏠')
+        ),
+        R('div', { style:{ padding:16, display:'flex', flexDirection:'column', gap:8 } },
+          R('div', { style:{ display:'flex', justifyContent:'space-between', alignItems:'flex-start', gap:8 } },
+            R('div', { style:{ fontSize:15.5, fontWeight:800, color:'#16261C' } }, p.title),
+            R('span', { style:{ flexShrink:0, fontSize:11.5, fontWeight:700, color:sp[0], background:sp[1], borderRadius:20, padding:'4px 10px' } }, p.status)
+          ),
+          R('div', { style:{ fontSize:12.5, color:'#9AA0A6' } }, p.city + (p.district ? (' · ' + p.district) : '')),
+          R('div', { style:{ fontSize:18, fontWeight:800, color:'#1F8A5B' } }, p.currency + ' ' + Number(p.price).toLocaleString('en-US')),
+          R('div', { style:{ display:'flex', gap:14, fontSize:12.5, color:'#5C6360', flexWrap:'wrap' } },
+            p.area ? R('span', {}, p.area + ' م²') : null,
+            p.beds ? R('span', {}, p.beds + ' غرف') : null,
+            p.baths ? R('span', {}, p.baths + ' دورات مياه') : null
+          ),
+          R('div', { style:{ display:'flex', gap:8, marginTop:6, paddingTop:14, borderTop:'1px solid #F0F0F0' } },
+            R('button', { onClick:() => this.openEdit(p), style:{ flex:1, border:'none', borderRadius:10, padding:'10px', background:'#16261C', color:'#fff', fontFamily:'inherit', fontSize:13, fontWeight:700, cursor:'pointer' } }, 'تعديل'),
+            R('button', { style:{ flex:1, border:'none', borderRadius:10, padding:'10px', background:'#EAF7E0', color:'#1F8A5B', fontFamily:'inherit', fontSize:13, fontWeight:700, cursor:'pointer' } }, 'عرض'),
+            R('button', { onClick:() => this.deleteProp(p.id), style:{ border:'none', borderRadius:10, padding:'10px 16px', background:'#FDECEC', color:'#E5484D', fontFamily:'inherit', fontSize:13, fontWeight:700, cursor:'pointer' } }, 'حذف')
+          )
+        )
+      );
+    };
+    const propCards = filtered.map(card);
+
+    // ---------- IMAGE UPLOAD ----------
+    const imgs = this.state.images;
+    const dropStyle = 'display:block;border-radius:16px;padding:28px;text-align:center;cursor:pointer;' +
+      'border:2px dashed ' + (this.state.dragOver ? '#5FB13B' : '#B7E0C9') + ';' +
+      'background:' + (this.state.dragOver ? '#EAF7E0' : '#F4FBF6') + ';' +
+      'transition:all .15s';
+    const imgThumbs = imgs.length ? R('div', { style:{ display:'grid', gridTemplateColumns:'repeat(auto-fill, minmax(96px, 1fr))', gap:10, marginTop:12 } },
+      imgs.map((src, i) => R('div', { key:i, style:{ position:'relative' } },
+        R('img', { src, style:{ width:'100%', height:84, objectFit:'cover', borderRadius:10, border:'1px solid #ECECEC', display:'block' } }),
+        R('button', { onClick:(e) => { e.preventDefault(); this.removeImg(i); }, style:{ position:'absolute', top:5, insetInlineEnd:5, width:22, height:22, borderRadius:'50%', border:'none', background:'rgba(22,38,28,0.82)', color:'#fff', fontSize:11, cursor:'pointer', lineHeight:1, display:'flex', alignItems:'center', justifyContent:'center' } }, '✕'),
+        i === 0 ? R('span', { style:{ position:'absolute', bottom:5, insetInlineStart:5, background:'#1F8A5B', color:'#fff', fontSize:9, fontWeight:700, padding:'2px 6px', borderRadius:10 } }, 'غلاف') : null
+      ))
+    ) : null;
+
+    return { barChart, donutChart, txnRows,
+      showForm: this.state.showForm, openForm: this.openForm, closeForm: this.closeForm,
+      stop: this.stop, imgCount: imgs.length, onImgChange: this.onImgChange,
+      dropStyle, imgThumbs, onDrop: this.onDrop, onDragOver: this.onDragOver, onDragLeave: this.onDragLeave,
+      saveProp: this.saveProp,
+      formTitle: this.state.editId ? 'تعديل العقار' : 'عقار جديد',
+      saveLabel: this.state.editId ? 'حفظ التعديلات' : 'إنشاء',
+      isDashboard: page === 'dashboard', isProperties: page === 'properties',
+      goDashboard: this.goDashboard, goProperties: this.goProperties,
+      dashStyle, propStyle,
+      dashMEnter, dashMLeave, propMEnter, propMLeave,
+      propCards, noProps: filtered.length === 0,
+      q: this.state.q, fType: this.state.fType, fStatus: this.state.fStatus,
+      onSearch: this.onSearch, onFType: this.onFType, onFStatus: this.onFStatus };
+  }
+}
+</script>
+</body>
+</html>
