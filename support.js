@@ -328,13 +328,15 @@
           savedTaValues[ta.id] = ta.value;
         });
 
-        // Save all [data-f] form field values so re-renders (e.g. image uploads) don't wipe typed input
+        // Save all form fields: [data-f] = property form, [data-bf] = booking form
         var savedFieldValues = null;
-        var fieldEls = Array.from(self._container.querySelectorAll('[data-f]'));
+        var fieldEls = Array.from(self._container.querySelectorAll('[data-f],[data-bf]'));
         if (fieldEls.length > 0) {
           savedFieldValues = {};
           fieldEls.forEach(function(el) {
-            savedFieldValues[el.getAttribute('data-f')] = el.type === 'checkbox' ? el.checked : el.value;
+            var attr = el.hasAttribute('data-f') ? 'data-f' : 'data-bf';
+            var key  = attr + '=' + el.getAttribute(attr);
+            savedFieldValues[key] = el.type === 'checkbox' ? el.checked : el.value;
           });
         }
 
@@ -348,12 +350,13 @@
           if (ta) ta.value = savedTaValues[id];
         });
 
-        // Restore [data-f] field values — preserves what the user typed across state changes
+        // Restore form fields: key is "data-f=title" or "data-bf=status"
         if (savedFieldValues) {
-          Object.keys(savedFieldValues).forEach(function(k) {
-            Array.from(self._container.querySelectorAll('[data-f="' + k + '"]')).forEach(function(el) {
-              if (el.type === 'checkbox') el.checked = savedFieldValues[k];
-              else el.value = savedFieldValues[k];
+          Object.keys(savedFieldValues).forEach(function(key) {
+            var selector = '[' + key.replace('=', '="') + '"]';
+            Array.from(self._container.querySelectorAll(selector)).forEach(function(el) {
+              if (el.type === 'checkbox') el.checked = savedFieldValues[key];
+              else el.value = savedFieldValues[key];
             });
           });
         }

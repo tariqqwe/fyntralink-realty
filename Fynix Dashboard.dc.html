@@ -76,10 +76,10 @@
         <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="14" rx="2" stroke="currentColor" stroke-width="1.8"></rect><path d="M3 14l4-4 3 3 4-5 7 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path></svg>
         <span class="sb-nav-text">Properties</span>
       </div>
-      
-      
-      
-      
+      <div onClick="{{ goBookings }}" onMouseenter="{{ bookMEnter }}" onMouseleave="{{ bookMLeave }}" style="{{ bookStyle }}">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="16" rx="2" stroke="currentColor" stroke-width="1.8"></rect><path d="M3 9h18" stroke="currentColor" stroke-width="1.8"></path><path d="M8 2v4M16 2v4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path></svg>
+        <span class="sb-nav-text">Bookings</span>
+      </div>
     </nav>
 
     
@@ -377,6 +377,42 @@
       </sc-if>
     </div>
    </sc-if>
+
+   <!-- ============ BOOKINGS PAGE ============ -->
+   <sc-if value="{{ isBookings }}" hint-placeholder-val="{{ false }}">
+    <div dir="rtl" style="font-family: 'Plus Jakarta Sans', sans-serif;">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 26px;">
+        <div>
+          <div style="font-size: 13px; color: #9AA0A6;">تطبيق العقارات</div>
+          <div style="font-size: 28px; font-weight: 800; margin-top: 7px;">مواعيد المعاينة</div>
+        </div>
+        <button onClick="{{ openBookingForm }}" style="display: flex; align-items: center; gap: 7px; border: none; border-radius: 12px; padding: 11px 18px; background: #16261C; color: #FFFFFF; font-family: inherit; font-size: 13.5px; font-weight: 700; cursor: pointer;"><span style="font-size: 15px;">＋</span> موعد معاينة جديد</button>
+      </div>
+
+      <!-- Filter tabs -->
+      <div style="display: flex; gap: 8px; margin-bottom: 22px; flex-wrap: wrap;">
+        <button onClick="{{ bTabAllClick }}" style="{{ bTabAllStyle }}">الكل <span style="background: rgba(255,255,255,0.2); border-radius: 20px; padding: 2px 8px; font-size: 12px;">{{ bCountAll }}</span></button>
+        <button onClick="{{ bTabTodayClick }}" style="{{ bTabTodayStyle }}">اليوم <span style="background: rgba(255,255,255,0.2); border-radius: 20px; padding: 2px 8px; font-size: 12px;">{{ bCountToday }}</span></button>
+        <button onClick="{{ bTabUpcomingClick }}" style="{{ bTabUpcomingStyle }}">القادمة <span style="background: rgba(255,255,255,0.2); border-radius: 20px; padding: 2px 8px; font-size: 12px;">{{ bCountUpcoming }}</span></button>
+        <button onClick="{{ bTabPastClick }}" style="{{ bTabPastStyle }}">السابقة <span style="background: rgba(255,255,255,0.2); border-radius: 20px; padding: 2px 8px; font-size: 12px;">{{ bCountPast }}</span></button>
+      </div>
+
+      <!-- Bookings table -->
+      <div style="background: #FFFFFF; border: 1px solid #ECECEC; border-radius: 20px; overflow: hidden;">
+        <div style="display: grid; grid-template-columns: 2fr 1.5fr 1.4fr 1fr 0.9fr 110px; gap: 12px; padding: 14px 20px; border-bottom: 1px solid #F0F0F0; font-size: 11.5px; color: #AEB2B6; font-weight: 600;">
+          <div>العميل</div><div>الوقت</div><div>الموقع</div><div>المسؤول</div><div>الحالة</div><div></div>
+        </div>
+        {{ bookingRows }}
+        <sc-if value="{{ noBookings }}" hint-placeholder-val="{{ false }}">
+          <div style="text-align: center; padding: 60px 20px; color: #9AA0A6;">
+            <div style="font-size: 46px;">📅</div>
+            <div style="font-size: 15px; font-weight: 600; margin-top: 12px; color: #5C6360;">لا توجد مواعيد</div>
+            <div style="font-size: 13px; margin-top: 4px;">أضف موعد معاينة جديدًا</div>
+          </div>
+        </sc-if>
+      </div>
+    </div>
+   </sc-if>
   </main>
 
   <!-- ============ NEW PROPERTY FORM MODAL ============ -->
@@ -548,6 +584,83 @@
       </div>
     </div>
   </sc-if>
+
+  <!-- ============ BOOKING FORM MODAL ============ -->
+  <sc-if value="{{ showBookingForm }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ closeBookingForm }}" style="position: fixed; inset: 0; z-index: 1001; background: rgba(15,25,18,0.45); display: flex; align-items: flex-start; justify-content: center; overflow-y: auto; padding: 32px 16px;">
+      <div data-booking-form-root="1" dir="rtl" onClick="{{ stopBF }}" style="width: 90%; max-width: 640px; background: #FFFFFF; border-radius: 22px; padding: 28px 30px; box-shadow: 0 30px 80px rgba(0,0,0,0.3); font-family: 'Plus Jakarta Sans', sans-serif;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 22px;">
+          <span style="font-size: 22px; font-weight: 800;">{{ bookingFormTitle }}</span>
+          <button onClick="{{ closeBookingForm }}" style="width: 34px; height: 34px; border-radius: 10px; border: 1px solid #ECECEC; background: #FFFFFF; cursor: pointer; font-size: 16px; color: #5C6360;">✕</button>
+        </div>
+
+        <!-- اسم العميل / رقمه -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+          <div>
+            <label style="display: block; text-align: right; font-size: 13px; color: #5C6360; margin-bottom: 8px; font-weight: 500;">اسم العميل <span style="color:#E5484D;">*</span></label>
+            <input type="text" data-bf="clientName" style="width: 100%; padding: 12px 14px; border: 1px solid #ECECEC; border-radius: 12px; font-family: inherit; font-size: 14px; color: #16261C; background: #fff; text-align: right; outline: none; box-sizing: border-box;">
+          </div>
+          <div>
+            <label style="display: block; text-align: right; font-size: 13px; color: #5C6360; margin-bottom: 8px; font-weight: 500;">رقم التواصل</label>
+            <input type="text" data-bf="clientPhone" style="width: 100%; padding: 12px 14px; border: 1px solid #ECECEC; border-radius: 12px; font-family: inherit; font-size: 14px; color: #16261C; background: #fff; text-align: right; outline: none; box-sizing: border-box;">
+          </div>
+        </div>
+
+        <!-- اسم العقار -->
+        <div style="margin-top: 16px;">
+          <label style="display: block; text-align: right; font-size: 13px; color: #5C6360; margin-bottom: 8px; font-weight: 500;">عنوان العقار</label>
+          <input type="text" data-bf="propertyTitle" placeholder="اكتب اسم العقار" style="width: 100%; padding: 12px 14px; border: 1px solid #ECECEC; border-radius: 12px; font-family: inherit; font-size: 14px; color: #16261C; background: #fff; text-align: right; outline: none; box-sizing: border-box;">
+        </div>
+
+        <!-- وقت البداية / النهاية -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px;">
+          <div>
+            <label style="display: block; text-align: right; font-size: 13px; color: #5C6360; margin-bottom: 8px; font-weight: 500;">وقت البداية <span style="color:#E5484D;">*</span></label>
+            <input type="datetime-local" data-bf="startTime" style="width: 100%; padding: 12px 14px; border: 1px solid #ECECEC; border-radius: 12px; font-family: inherit; font-size: 14px; color: #16261C; background: #fff; outline: none; box-sizing: border-box;">
+          </div>
+          <div>
+            <label style="display: block; text-align: right; font-size: 13px; color: #5C6360; margin-bottom: 8px; font-weight: 500;">وقت الانتهاء</label>
+            <input type="datetime-local" data-bf="endTime" style="width: 100%; padding: 12px 14px; border: 1px solid #ECECEC; border-radius: 12px; font-family: inherit; font-size: 14px; color: #16261C; background: #fff; outline: none; box-sizing: border-box;">
+          </div>
+        </div>
+
+        <!-- الموقع / الحالة -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px;">
+          <div>
+            <label style="display: block; text-align: right; font-size: 13px; color: #5C6360; margin-bottom: 8px; font-weight: 500;">موقع المعاينة</label>
+            <input type="text" data-bf="location" placeholder="العنوان أو الوصف" style="width: 100%; padding: 12px 14px; border: 1px solid #ECECEC; border-radius: 12px; font-family: inherit; font-size: 14px; color: #16261C; background: #fff; text-align: right; outline: none; box-sizing: border-box;">
+          </div>
+          <div>
+            <label style="display: block; text-align: right; font-size: 13px; color: #5C6360; margin-bottom: 8px; font-weight: 500;">الحالة</label>
+            <div style="position: relative;">
+              <select data-bf="status" style="width: 100%; padding: 12px 14px; border: 1px solid #ECECEC; border-radius: 12px; font-family: inherit; font-size: 14px; color: #16261C; background: #fff; text-align: right; outline: none; appearance: none; -webkit-appearance: none; box-sizing: border-box;">
+                <option value="مجدولة">مجدولة</option><option value="مكتملة">مكتملة</option><option value="ملغاة">ملغاة</option>
+              </select>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%); pointer-events: none;"><path d="M6 9l6 6 6-6" stroke="#5C6360" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- المسؤول -->
+        <div style="margin-top: 16px;">
+          <label style="display: block; text-align: right; font-size: 13px; color: #5C6360; margin-bottom: 8px; font-weight: 500;">المسؤول عن المعاينة</label>
+          <input type="text" data-bf="assignedTo" placeholder="اسم الموظف أو الوكيل" style="width: 100%; padding: 12px 14px; border: 1px solid #ECECEC; border-radius: 12px; font-family: inherit; font-size: 14px; color: #16261C; background: #fff; text-align: right; outline: none; box-sizing: border-box;">
+        </div>
+
+        <!-- ملاحظات -->
+        <div style="margin-top: 16px;">
+          <label style="display: block; text-align: right; font-size: 13px; color: #5C6360; margin-bottom: 8px; font-weight: 500;">ملاحظات</label>
+          <textarea data-bf="notes" rows="3" style="width: 100%; padding: 12px 14px; border: 1px solid #ECECEC; border-radius: 12px; font-family: inherit; font-size: 14px; color: #16261C; background: #fff; text-align: right; outline: none; resize: vertical; box-sizing: border-box;"></textarea>
+        </div>
+
+        <!-- footer -->
+        <div style="display: flex; gap: 14px; align-items: center; margin-top: 26px; border-top: 1px solid #F0F0F0; padding-top: 20px;">
+          <button onClick="{{ saveBooking }}" style="flex: 1; border: none; border-radius: 14px; padding: 14px; background: #8BD850; color: #16261C; font-family: inherit; font-size: 14.5px; font-weight: 700; cursor: pointer;">{{ bookingSaveLabel }}</button>
+          <button onClick="{{ closeBookingForm }}" style="border: 1px solid #ECECEC; border-radius: 14px; padding: 14px 24px; background: #FFFFFF; color: #5C6360; font-family: inherit; font-size: 14px; font-weight: 600; cursor: pointer;">إلغاء</button>
+        </div>
+      </div>
+    </div>
+  </sc-if>
 </div>
 </x-dc>
 <script type="text/x-dc" data-dc-script>
@@ -555,7 +668,8 @@ class Component extends DCLogic {
   state = {
     page: 'dashboard', showForm: false, images: [], dragOver: false, editId: null,
     fType: '', fStatus: '', q: '',
-    props: []
+    props: [],
+    bookings: [], bookingTab: 'all', showBookingForm: false, editBookingId: null
   };
 
   componentDidMount() {
@@ -563,24 +677,36 @@ class Component extends DCLogic {
       .then(r => r.json())
       .then(a => { if (Array.isArray(a)) this.setState({ props: a }); })
       .catch(() => {});
+    fetch('/api/bookings')
+      .then(r => r.json())
+      .then(a => { if (Array.isArray(a)) this.setState({ bookings: a }); })
+      .catch(() => {});
   }
 
   componentDidUpdate(_props, prev) {
-    // DCLogic ignores setState callbacks, so we use componentDidUpdate
-    // to initialize form fields whenever the form transitions from hidden → visible
     if (this.state.showForm && !prev.showForm) {
       if (this.state.editId) this.populate();
       else this.resetForm();
+    }
+    if (this.state.showBookingForm && !prev.showBookingForm) {
+      if (this.state.editBookingId) this.populateBooking();
+      else this.resetBookingForm();
     }
   }
 
   goDashboard = () => this.setState({ page: 'dashboard' });
   goProperties = () => this.setState({ page: 'properties' });
+  goBookings   = () => this.setState({ page: 'bookings' });
 
   openForm = () => { this._draft = null; this.setState({ editId: null, showForm: true, images: [] }, () => this.resetForm()); };
   openEdit = (p) => { this._draft = p; this.setState({ editId: p.id, showForm: true, images: (p.images || []).slice() }, () => this.populate()); };
   closeForm = () => this.setState({ showForm: false, editId: null });
   stop = (e) => e.stopPropagation();
+
+  openBookingForm  = () => { this._bdraft = null; this.setState({ editBookingId: null, showBookingForm: true }); };
+  openEditBooking  = (b) => { this._bdraft = b;   this.setState({ editBookingId: b.id, showBookingForm: true }); };
+  closeBookingForm = () => this.setState({ showBookingForm: false, editBookingId: null });
+  stopBF = (e) => e.stopPropagation();
 
   handleFiles = (fileList) => {
     const allowed = ['image/jpeg', 'image/png', 'image/webp'];
@@ -691,6 +817,62 @@ class Component extends DCLogic {
   deleteProp = (id) => {
     fetch('/api/properties/' + id, { method: 'DELETE' })
       .then(() => { this.setState({ props: this.state.props.filter(p => p.id !== id) }); })
+      .catch(() => {});
+  };
+
+  _bookingFormRoot() { return this._container && this._container.querySelector('[data-booking-form-root="1"]'); }
+
+  resetBookingForm() {
+    const root = this._bookingFormRoot(); if (!root) return;
+    root.querySelectorAll('[data-bf]').forEach(el => {
+      if (el.tagName === 'SELECT') el.selectedIndex = 0;
+      else el.value = '';
+    });
+  }
+  populateBooking() {
+    const root = this._bookingFormRoot(), d = this._bdraft; if (!root || !d) return;
+    root.querySelectorAll('[data-bf]').forEach(el => {
+      const k = el.getAttribute('data-bf');
+      if (!(k in d)) return;
+      if (el.type === 'datetime-local') el.value = d[k] ? String(d[k]).slice(0, 16) : '';
+      else el.value = d[k] != null ? d[k] : '';
+    });
+  }
+  readBookingForm() {
+    const root = this._bookingFormRoot(); if (!root) return {};
+    const o = {};
+    root.querySelectorAll('[data-bf]').forEach(el => { o[el.getAttribute('data-bf')] = el.value; });
+    return o;
+  }
+  saveBooking = () => {
+    const f = this.readBookingForm();
+    const body = {
+      propertyTitle: (f.propertyTitle || '').trim(),
+      clientName:    (f.clientName    || '').trim(),
+      clientPhone:   (f.clientPhone   || '').trim(),
+      assignedTo:    (f.assignedTo    || '').trim(),
+      startTime:     f.startTime  || '',
+      endTime:       f.endTime    || '',
+      status:        f.status     || 'مجدولة',
+      location:      (f.location  || '').trim(),
+      notes:         (f.notes     || '').trim()
+    };
+    const isEdit = !!this.state.editBookingId;
+    const url    = isEdit ? '/api/bookings/' + this.state.editBookingId : '/api/bookings';
+    const method = isEdit ? 'PUT' : 'POST';
+    fetch(url, { method, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) })
+      .then(r => r.json())
+      .then(saved => {
+        const bookings = isEdit
+          ? this.state.bookings.map(b => b.id === saved.id ? saved : b)
+          : [saved, ...this.state.bookings];
+        this.setState({ bookings, showBookingForm: false, editBookingId: null });
+      })
+      .catch(() => {});
+  };
+  deleteBooking = (id) => {
+    fetch('/api/bookings/' + id, { method: 'DELETE' })
+      .then(() => { this.setState({ bookings: this.state.bookings.filter(b => b.id !== id) }); })
       .catch(() => {});
   };
 
@@ -805,12 +987,79 @@ class Component extends DCLogic {
       R('div', {}, statusPill(t.status))
     ));
 
+    // ---------- BOOKINGS ----------
+    const nowDT = new Date();
+    const todayStr = nowDT.toISOString().slice(0, 10);
+    const { bookings, bookingTab } = this.state;
+
+    const bAll      = bookings;
+    const bToday    = bookings.filter(b => b.startTime && b.startTime.slice(0,10) === todayStr);
+    const bUpcoming = bookings.filter(b => b.startTime && new Date(b.startTime) > nowDT);
+    const bPast     = bookings.filter(b => b.startTime && new Date(b.startTime) < nowDT);
+
+    const filteredBookings = bookingTab === 'today'    ? bToday    :
+                             bookingTab === 'upcoming' ? bUpcoming :
+                             bookingTab === 'past'     ? bPast     : bAll;
+
+    const activeTabCSS = 'border:none;border-radius:10px;padding:9px 18px;background:#16261C;color:#FFFFFF;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:7px;';
+    const idleTabCSS   = 'border:1px solid #ECECEC;border-radius:10px;padding:9px 18px;background:#FFFFFF;color:#5C6360;font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:7px;';
+
+    const bTabAllStyle      = bookingTab === 'all'      ? activeTabCSS : idleTabCSS;
+    const bTabTodayStyle    = bookingTab === 'today'    ? activeTabCSS : idleTabCSS;
+    const bTabUpcomingStyle = bookingTab === 'upcoming' ? activeTabCSS : idleTabCSS;
+    const bTabPastStyle     = bookingTab === 'past'     ? activeTabCSS : idleTabCSS;
+
+    const bTabAllClick      = () => this.setState({ bookingTab: 'all' });
+    const bTabTodayClick    = () => this.setState({ bookingTab: 'today' });
+    const bTabUpcomingClick = () => this.setState({ bookingTab: 'upcoming' });
+    const bTabPastClick     = () => this.setState({ bookingTab: 'past' });
+
+    const bStatusC = { 'مجدولة':['#C98A1B','#FBF1DD'], 'مكتملة':['#5FB13B','#EAF7E0'], 'ملغاة':['#E5484D','#FDECEC'] };
+    const fmtDT = (iso) => {
+      if (!iso) return '—';
+      try {
+        const d = new Date(iso);
+        return d.toLocaleDateString('ar-SA', {year:'numeric', month:'short', day:'numeric'}) +
+               ' ' + d.toLocaleTimeString('ar-SA', {hour:'2-digit', minute:'2-digit', hour12:true});
+      } catch(e) { return iso; }
+    };
+
+    const bookingRows = filteredBookings.length ? R('div', {},
+      filteredBookings.map((b, k) => {
+        const sp = bStatusC[b.status] || bStatusC['مجدولة'];
+        return R('div', { key: b.id, style: {
+          display:'grid', gridTemplateColumns:'2fr 1.5fr 1.4fr 1fr 0.9fr 110px',
+          gap:12, alignItems:'center', padding:'15px 20px',
+          borderBottom: k < filteredBookings.length - 1 ? '1px solid #F4F4F4' : 'none'
+        }},
+          R('div', {},
+            R('div', {style:{fontSize:14, fontWeight:700, color:'#16261C'}}, b.clientName || '—'),
+            R('div', {style:{fontSize:12, color:'#9AA0A6', marginTop:2}}, b.clientPhone || ''),
+            b.propertyTitle ? R('div', {style:{fontSize:12, color:'#5FB13B', marginTop:3, display:'flex', alignItems:'center', gap:4}},
+              R('span', {style:{fontSize:11}}, '🏠'), b.propertyTitle) : null
+          ),
+          R('div', {},
+            R('div', {style:{fontSize:12.5, fontWeight:600, color:'#16261C'}}, fmtDT(b.startTime)),
+            b.endTime ? R('div', {style:{fontSize:11.5, color:'#9AA0A6', marginTop:2}}, '← ' + fmtDT(b.endTime)) : null
+          ),
+          R('div', {style:{fontSize:12.5, color:'#5C6360'}}, b.location || '—'),
+          R('div', {style:{fontSize:12.5, color:'#5C6360'}}, b.assignedTo || '—'),
+          R('span', {style:{fontSize:11.5, fontWeight:700, color:sp[0], background:sp[1], borderRadius:20, padding:'5px 12px', whiteSpace:'nowrap', display:'inline-block'}}, b.status || 'مجدولة'),
+          R('div', {style:{display:'flex', gap:6}},
+            R('button', {onClick:() => this.openEditBooking(b), style:{border:'none', borderRadius:8, padding:'8px 12px', background:'#16261C', color:'#fff', fontFamily:'inherit', fontSize:12, fontWeight:700, cursor:'pointer'}}, 'تعديل'),
+            R('button', {onClick:() => this.deleteBooking(b.id), style:{border:'none', borderRadius:8, padding:'8px 10px', background:'#FDECEC', color:'#E5484D', fontFamily:'inherit', fontSize:12, fontWeight:700, cursor:'pointer'}}, 'حذف')
+          )
+        );
+      })
+    ) : null;
+
     // ---------- NAV STATE ----------
     const activeCSS = 'display:flex;align-items:center;gap:12px;padding:11px 14px;border-radius:12px;background:#FFFFFF;box-shadow:0 1px 3px rgba(0,0,0,0.06);font-weight:700;font-size:14px;cursor:pointer;color:#16261C';
     const idleCSS   = 'display:flex;align-items:center;gap:12px;padding:11px 14px;border-radius:12px;background:transparent;color:#5C6360;font-size:14px;font-weight:500;cursor:pointer';
     const page = this.state.page;
-    const dashStyle = page === 'dashboard'   ? activeCSS : idleCSS;
-    const propStyle = page === 'properties'  ? activeCSS : idleCSS;
+    const dashStyle = page === 'dashboard'  ? activeCSS : idleCSS;
+    const propStyle = page === 'properties' ? activeCSS : idleCSS;
+    const bookStyle = page === 'bookings'   ? activeCSS : idleCSS;
 
     const _hIn  = (e) => { e.currentTarget.style.background = '#F4F5F5'; };
     const _hOut = (e) => { e.currentTarget.style.background = 'transparent'; };
@@ -819,6 +1068,8 @@ class Component extends DCLogic {
     const dashMLeave = page === 'dashboard'  ? _noop : _hOut;
     const propMEnter = page === 'properties' ? _noop : _hIn;
     const propMLeave = page === 'properties' ? _noop : _hOut;
+    const bookMEnter = page === 'bookings'   ? _noop : _hIn;
+    const bookMLeave = page === 'bookings'   ? _noop : _hOut;
 
     // ---------- PROPERTY CARDS ----------
     const stc = { 'متاح':['#5FB13B','#EAF7E0'], 'محجوز':['#C98A1B','#FBF1DD'], 'مباع':['#E5484D','#FDECEC'], 'مؤجر':['#7A6FF0','#EDEBFD'], 'مسودة':['#7A807D','#F1F2F2'] };
@@ -886,13 +1137,23 @@ class Component extends DCLogic {
       saveProp: this.saveProp,
       formTitle: this.state.editId ? 'تعديل العقار' : 'عقار جديد',
       saveLabel: this.state.editId ? 'حفظ التعديلات' : 'إنشاء',
-      isDashboard: page === 'dashboard', isProperties: page === 'properties',
-      goDashboard: this.goDashboard, goProperties: this.goProperties,
-      dashStyle, propStyle,
-      dashMEnter, dashMLeave, propMEnter, propMLeave,
+      isDashboard: page === 'dashboard', isProperties: page === 'properties', isBookings: page === 'bookings',
+      goDashboard: this.goDashboard, goProperties: this.goProperties, goBookings: this.goBookings,
+      dashStyle, propStyle, bookStyle,
+      dashMEnter, dashMLeave, propMEnter, propMLeave, bookMEnter, bookMLeave,
       propCards, noProps: filtered.length === 0,
       q: this.state.q, fType: this.state.fType, fStatus: this.state.fStatus,
-      onSearch: this.onSearch, onFType: this.onFType, onFStatus: this.onFStatus };
+      onSearch: this.onSearch, onFType: this.onFType, onFStatus: this.onFStatus,
+      showBookingForm: this.state.showBookingForm,
+      openBookingForm: this.openBookingForm, closeBookingForm: this.closeBookingForm, stopBF: this.stopBF,
+      saveBooking: this.saveBooking,
+      bookingFormTitle: this.state.editBookingId ? 'تعديل الموعد' : 'موعد معاينة جديد',
+      bookingSaveLabel: this.state.editBookingId ? 'حفظ التعديلات' : 'إنشاء الموعد',
+      bookingRows, noBookings: filteredBookings.length === 0,
+      bTabAllStyle, bTabTodayStyle, bTabUpcomingStyle, bTabPastStyle,
+      bTabAllClick, bTabTodayClick, bTabUpcomingClick, bTabPastClick,
+      bCountAll: bAll.length, bCountToday: bToday.length,
+      bCountUpcoming: bUpcoming.length, bCountPast: bPast.length };
   }
 }
 </script>

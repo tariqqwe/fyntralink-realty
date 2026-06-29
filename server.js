@@ -6,8 +6,9 @@ const fs      = require('fs');
 
 const app         = express();
 const PORT        = process.env.PORT || 3000;
-const DATA_FILE   = path.join(__dirname, 'data', 'properties.json');
-const UPLOADS_DIR = path.join(__dirname, 'uploads');
+const DATA_FILE     = path.join(__dirname, 'data', 'properties.json');
+const BOOKINGS_FILE = path.join(__dirname, 'data', 'bookings.json');
+const UPLOADS_DIR   = path.join(__dirname, 'uploads');
 
 // ── middleware ────────────────────────────────────────────────────────────────
 app.use(cors({
@@ -56,6 +57,14 @@ function fullUrl(req, filename) {
 }
 function deleteFile(filename) {
   try { fs.unlinkSync(path.join(UPLOADS_DIR, filename)); } catch {}
+}
+
+function readBookings() {
+  try { return JSON.parse(fs.readFileSync(BOOKINGS_FILE, 'utf8')); }
+  catch { return []; }
+}
+function writeBookings(data) {
+  fs.writeFileSync(BOOKINGS_FILE, JSON.stringify(data, null, 2), 'utf8');
 }
 
 // Convert stored features string ("one\ntwo") to a clean array for AI consumers
@@ -228,6 +237,68 @@ app.get('/api/ai/properties/:id', (req, res) => {
   if (!prop) return res.status(404).json({ error: 'Not found' });
   res.json(aiFormat(prop, req));
 });
+
+// ── GET /api/bookings ─────────────────────────────────────────────────────────
+app.get('/api/bookings', (_req, res) => res.json(readBookings()));
+
+// ── POST /api/bookings ────────────────────────────────────────────────────────
+app.post('/api/bookings', (req, res) => {
+  const list = readBookings();
+  const now  = new Date().toISOString();
+  const b = {
+    id:            'b' + Date.now(),
+    propertyId:    req.body.propertyId    || '',
+    propertyTitle: req.body.propertyTitle || '',
+    clientName:    req.body.clientName    || '',
+    clientPhone:   req.body.clientPhone   || '',
+    assignedTo:    req.body.assignedTo    || '',
+    startTime:     req.body.startTime     || now,
+    endTime:       req.body.endTime       || '',
+    status:        req.body.status        || 'مجدولة',
+    location:      req.body.location      || '',
+    notes:         req.body.notes         || '',
+    createdAt: now, updatedAt: now
+  };
+  list.unshift(b);
+  writeBookings(list);
+  res.status(201).json(b);
+});
+
+// ── PUT /api/bookings/:id ─────────────────────────────────────────────────────
+app.put('/api/bookings/:id', (req, res) => {
+  const list = readBookings();
+  const idx  = list.findIndex(b => b.id === req.params.id);
+  if (idx === -1) return res.status(404).json({ error: 'Not found' });
+  const now = new Date().toISOString(), p = list[idx];
+  list[idx] = {
+    id:            p.id,
+    propertyId:    req.body.propertyId    !== undefined ? req.body.propertyId    : p.propertyId,
+    propertyTitle: req.body.propertyTitle !== undefined ? req.body.propertyTitle : p.propertyTitle,
+    clientName:    req.body.clientName    !== undefined ? req.body.clientName    : p.clientName,
+    clientPhone:   req.body.clientPhone   !== undefined ? req.body.clientPhone   : p.clientPhone,
+    assignedTo:    req.body.assignedTo    !== undefined ? req.body.assignedTo    : p.assignedTo,
+    startTime:     req.body.startTime     !== undefined ? req.body.startTime     : p.startTime,
+    endTime:       req.body.endTime       !== undefined ? req.body.endTime       : p.endTime,
+    status:        req.body.status        !== undefined ? req.body.status        : p.status,
+    location:      req.body.location      !== undefined ? req.body.location      : p.location,
+    notes:         req.body.notes         !== undefined ? req.body.notes         : p.notes,
+    createdAt: p.createdAt, updatedAt: now
+  };
+  writeBookings(list);
+  res.json(list[idx]);
+});
+
+// ── DELETE /api/bookings/:id ──────────────────────────────────────────────────
+app.delete('/api/bookings/:id', (req, res) => {
+  const list = readBookings();
+  if (!list.find(b => b.id === req.params.id))
+    return res.status(404).json({ error: 'Not found' });
+  writeBookings(list.filter(b => b.id !== req.params.id));
+  res.json({ ok: true });
+});
+
+// ── GET /api/ai/bookings ──────────────────────────────────────────────────────
+app.get('/api/ai/bookings', (_req, res) => res.json(readBookings()));
 
 // ── GET /api/ai/summary ───────────────────────────────────────────────────────
 app.get('/api/ai/summary', (req, res) => {
