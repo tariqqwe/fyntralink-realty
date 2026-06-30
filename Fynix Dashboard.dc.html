@@ -468,9 +468,9 @@
       </div>
       <div style="background:#FFFFFF;border:1px solid #ECECEC;border-radius:20px;overflow:hidden;">
         <div style="overflow-x:auto;">
-          <div style="min-width:1200px;">
-            <div style="display:grid;grid-template-columns:70px 90px 1fr 100px 1fr 90px 100px 90px 90px 80px 90px 80px;gap:10px;padding:14px 20px;border-bottom:1px solid #F0F0F0;font-size:11px;color:#AEB2B6;font-weight:600;">
-              <div>رقم العملية</div><div>التاريخ</div><div>الاسم</div><div>الجوال</div><div>العقار</div><div>السعر</div><div>موعد المعاينة</div><div>حالة المعاينة</div><div>نتيجة المعاينة</div><div>حالة القرار</div><div>حالة الصفقة</div><div></div>
+          <div style="min-width:1400px;">
+            <div style="display:grid;grid-template-columns:70px 90px 1fr 100px 1fr 90px 100px 90px 90px 80px 100px 80px 90px 80px;gap:10px;padding:14px 20px;border-bottom:1px solid #F0F0F0;font-size:11px;color:#AEB2B6;font-weight:600;">
+              <div>رقم العملية</div><div>التاريخ</div><div>الاسم</div><div>الجوال</div><div>العقار</div><div>السعر</div><div>موعد المعاينة</div><div>حالة المعاينة</div><div>نتيجة المعاينة</div><div>حالة القرار</div><div>تاريخ زيارة المكتب</div><div>وقت الزيارة</div><div>حالة الصفقة</div><div></div>
             </div>
             {{ pcRows }}
           </div>
@@ -498,9 +498,9 @@
       </div>
       <div style="background:#FFFFFF;border:1px solid #ECECEC;border-radius:20px;overflow:hidden;">
         <div style="overflow-x:auto;">
-          <div style="min-width:1200px;">
-            <div style="display:grid;grid-template-columns:70px 90px 1fr 100px 1fr 90px 100px 90px 90px 80px 90px 80px;gap:10px;padding:14px 20px;border-bottom:1px solid #F0F0F0;font-size:11px;color:#AEB2B6;font-weight:600;">
-              <div>رقم العملية</div><div>التاريخ</div><div>الاسم</div><div>الجوال</div><div>العقار</div><div>السعر الشهري</div><div>موعد المعاينة</div><div>حالة المعاينة</div><div>نتيجة المعاينة</div><div>حالة القرار</div><div>حالة العقد</div><div></div>
+          <div style="min-width:1400px;">
+            <div style="display:grid;grid-template-columns:70px 90px 1fr 100px 1fr 90px 100px 90px 90px 80px 100px 80px 90px 80px;gap:10px;padding:14px 20px;border-bottom:1px solid #F0F0F0;font-size:11px;color:#AEB2B6;font-weight:600;">
+              <div>رقم العملية</div><div>التاريخ</div><div>الاسم</div><div>الجوال</div><div>العقار</div><div>السعر الشهري</div><div>موعد المعاينة</div><div>حالة المعاينة</div><div>نتيجة المعاينة</div><div>حالة القرار</div><div>تاريخ زيارة المكتب</div><div>وقت الزيارة</div><div>حالة العقد</div><div></div>
             </div>
             {{ rcRows }}
           </div>
@@ -1515,7 +1515,7 @@ class Component extends DCLogic {
     const dStatusC={'بانتظار':['#C98A1B','#FBF1DD'],'وافق':['#5FB13B','#EAF7E0'],'رفض':['#E5484D','#FDECEC']};
     const dealStatusC={'جارية':['#C98A1B','#FBF1DD'],'مكتملة':['#5FB13B','#EAF7E0'],'ملغية':['#E5484D','#FDECEC']};
     const contractStatusC={'جاري':['#C98A1B','#FBF1DD'],'موقع':['#5FB13B','#EAF7E0'],'ملغي':['#E5484D','#FDECEC']};
-    const pcRcGridCols = '70px 90px 1fr 100px 1fr 90px 100px 90px 90px 80px 90px 80px';
+    const pcRcGridCols = '70px 90px 1fr 100px 1fr 90px 100px 90px 90px 80px 100px 80px 90px 80px';
 
     const makePCRCRow = (x, k, list, lastCol, onEdit, onDelete) => {
       const vs=vStatusC[x.viewingStatus]||vStatusC['مجدولة'];
@@ -1540,6 +1540,8 @@ class Component extends DCLogic {
         vr?R('span',{style:{fontSize:11,fontWeight:700,color:vr[0],background:vr[1],borderRadius:20,padding:'4px 10px',whiteSpace:'nowrap',display:'inline-block'}},x.viewingResult)
           :R('span',{style:{fontSize:11.5,color:'#AEB2B6'}},'—'),
         R('span',{style:{fontSize:11,fontWeight:700,color:ds[0],background:ds[1],borderRadius:20,padding:'4px 10px',whiteSpace:'nowrap',display:'inline-block'}},x.decisionStatus||'بانتظار'),
+        R('div',{style:{fontSize:12,color:'#5C6360'}},x.officeVisitDate?fmtDate(x.officeVisitDate):'—'),
+        R('div',{style:{fontSize:12,color:'#5C6360'}},x.officeVisitTime||'—'),
         R('span',{style:{fontSize:11,fontWeight:700,color:lastCol[0],background:lastCol[1],borderRadius:20,padding:'4px 10px',whiteSpace:'nowrap',display:'inline-block'}},x.dealStatus||x.contractStatus||''),
         R('div',{style:{display:'flex',gap:5}},
           R('button',{onClick:()=>onEdit(x),style:{border:'none',borderRadius:7,padding:'7px 10px',background:'#16261C',color:'#fff',fontFamily:'inherit',fontSize:11.5,fontWeight:700,cursor:'pointer'}},'تعديل'),
