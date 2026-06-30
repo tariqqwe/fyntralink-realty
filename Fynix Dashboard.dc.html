@@ -1472,8 +1472,14 @@ class Component extends DCLogic {
 
     const fmtDate = (s) => {
       if (!s) return '—';
-      try { return new Date(s+'T12:00:00').toLocaleDateString('ar-SA',{year:'numeric',month:'short',day:'numeric'}); }
-      catch(e) { return s; }
+      try {
+        const d = (s.includes('T') || s.includes('Z')) ? new Date(s) : new Date(s + 'T12:00:00');
+        if (isNaN(d.getTime())) return '—';
+        const y = d.getFullYear();
+        const m = String(d.getMonth()+1).padStart(2,'0');
+        const day = String(d.getDate()).padStart(2,'0');
+        return y+'/'+m+'/'+day;
+      } catch(e) { return s; }
     };
 
     const crStatusC = {'جديد':['#2563EB','#EFF6FF'],'جاري البحث':['#C98A1B','#FBF1DD'],'تم التوفير':['#5FB13B','#EAF7E0'],'ملغي':['#E5484D','#FDECEC']};
