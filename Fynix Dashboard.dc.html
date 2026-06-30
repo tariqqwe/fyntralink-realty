@@ -437,14 +437,7 @@
         <button onClick="{{ openCRForm }}" style="display:flex;align-items:center;gap:7px;border:none;border-radius:12px;padding:11px 18px;background:#16261C;color:#FFFFFF;font-family:inherit;font-size:13.5px;font-weight:700;cursor:pointer;"><span style="font-size:15px;">＋</span> طلب جديد</button>
       </div>
       <div style="background:#FFFFFF;border:1px solid #ECECEC;border-radius:20px;overflow:hidden;">
-        <div style="overflow-x:auto;">
-          <div style="min-width:980px;">
-            <div style="display:grid;grid-template-columns:70px 90px 1.2fr 110px 80px 80px 90px 1fr 110px 80px;gap:10px;padding:14px 20px;border-bottom:1px solid #F0F0F0;font-size:11px;color:#AEB2B6;font-weight:600;">
-              <div>رقم الطلب</div><div>التاريخ</div><div>الاسم</div><div>الجوال</div><div>نوع الطلب</div><div>نوع العقار</div><div>المدينة</div><div>الميزانية</div><div>الحالة</div><div></div>
-            </div>
-            {{ crRows }}
-          </div>
-        </div>
+        {{ crTable }}
         <sc-if value="{{ noCR }}" hint-placeholder-val="{{ false }}">
           <div style="text-align:center;padding:60px 20px;color:#9AA0A6;">
             <div style="font-size:46px;">📋</div>
@@ -467,14 +460,7 @@
         <button onClick="{{ openPCForm }}" style="display:flex;align-items:center;gap:7px;border:none;border-radius:12px;padding:11px 18px;background:#16261C;color:#FFFFFF;font-family:inherit;font-size:13.5px;font-weight:700;cursor:pointer;"><span style="font-size:15px;">＋</span> عميل جديد</button>
       </div>
       <div style="background:#FFFFFF;border:1px solid #ECECEC;border-radius:20px;overflow:hidden;">
-        <div style="overflow-x:auto;">
-          <div style="min-width:1400px;">
-            <div style="display:grid;grid-template-columns:70px 90px 1fr 100px 1fr 90px 100px 90px 90px 80px 100px 80px 90px 80px;gap:10px;padding:14px 20px;border-bottom:1px solid #F0F0F0;font-size:11px;color:#AEB2B6;font-weight:600;">
-              <div>رقم العملية</div><div>التاريخ</div><div>الاسم</div><div>الجوال</div><div>العقار</div><div>السعر</div><div>موعد المعاينة</div><div>حالة المعاينة</div><div>نتيجة المعاينة</div><div>حالة القرار</div><div>تاريخ زيارة المكتب</div><div>وقت الزيارة</div><div>حالة الصفقة</div><div></div>
-            </div>
-            {{ pcRows }}
-          </div>
-        </div>
+        {{ pcTable }}
         <sc-if value="{{ noPC }}" hint-placeholder-val="{{ false }}">
           <div style="text-align:center;padding:60px 20px;color:#9AA0A6;">
             <div style="font-size:46px;">🛍️</div>
@@ -497,14 +483,7 @@
         <button onClick="{{ openRCForm }}" style="display:flex;align-items:center;gap:7px;border:none;border-radius:12px;padding:11px 18px;background:#16261C;color:#FFFFFF;font-family:inherit;font-size:13.5px;font-weight:700;cursor:pointer;"><span style="font-size:15px;">＋</span> عميل جديد</button>
       </div>
       <div style="background:#FFFFFF;border:1px solid #ECECEC;border-radius:20px;overflow:hidden;">
-        <div style="overflow-x:auto;">
-          <div style="min-width:1400px;">
-            <div style="display:grid;grid-template-columns:70px 90px 1fr 100px 1fr 90px 100px 90px 90px 80px 100px 80px 90px 80px;gap:10px;padding:14px 20px;border-bottom:1px solid #F0F0F0;font-size:11px;color:#AEB2B6;font-weight:600;">
-              <div>رقم العملية</div><div>التاريخ</div><div>الاسم</div><div>الجوال</div><div>العقار</div><div>السعر الشهري</div><div>موعد المعاينة</div><div>حالة المعاينة</div><div>نتيجة المعاينة</div><div>حالة القرار</div><div>تاريخ زيارة المكتب</div><div>وقت الزيارة</div><div>حالة العقد</div><div></div>
-            </div>
-            {{ rcRows }}
-          </div>
-        </div>
+        {{ rcTable }}
         <sc-if value="{{ noRC }}" hint-placeholder-val="{{ false }}">
           <div style="text-align:center;padding:60px 20px;color:#9AA0A6;">
             <div style="font-size:46px;">🔑</div>
@@ -1485,28 +1464,50 @@ class Component extends DCLogic {
     const crStatusC = {'جديد':['#2563EB','#EFF6FF'],'جاري البحث':['#C98A1B','#FBF1DD'],'تم التوفير':['#5FB13B','#EAF7E0'],'ملغي':['#E5484D','#FDECEC']};
     const crTypeC   = {'شراء':['#16261C','#E8F0E9'],'إيجار':['#2563EB','#EFF6FF']};
 
-    const crRows = clientRequests.length ? R('div', {},
-      clientRequests.map((x,k) => {
-        const sc=crStatusC[x.requestStatus]||crStatusC['جديد'], tc=crTypeC[x.requestType]||crTypeC['شراء'];
-        return R('div',{key:x.id,style:{display:'grid',gridTemplateColumns:'70px 90px 1.2fr 110px 80px 80px 90px 1fr 110px 80px',gap:10,alignItems:'center',padding:'13px 20px',borderBottom:k<clientRequests.length-1?'1px solid #F4F4F4':'none'}},
-          R('div',{style:{fontSize:11.5,color:'#9AA0A6',fontFamily:'monospace'}},('#'+x.id.slice(-5)).toUpperCase()),
-          R('div',{style:{fontSize:12,color:'#5C6360'}},fmtDate(x.createdAt)),
-          R('div',{},
-            R('div',{style:{fontSize:13.5,fontWeight:700,color:'#16261C'}},(x.firstName||'')+' '+(x.lastName||'')),
-            x.assignedTo?R('div',{style:{fontSize:11.5,color:'#9AA0A6',marginTop:2}},'مكلف: '+x.assignedTo):null
-          ),
-          R('div',{style:{fontSize:12.5,color:'#5C6360'}},x.phone||'—'),
-          R('span',{style:{fontSize:11,fontWeight:700,color:tc[0],background:tc[1],borderRadius:20,padding:'4px 10px',whiteSpace:'nowrap',display:'inline-block'}},x.requestType||'شراء'),
-          R('div',{style:{fontSize:12.5,color:'#5C6360'}},x.propertyType||'—'),
-          R('div',{style:{fontSize:12.5,color:'#5C6360'}},x.city||'—'),
-          R('div',{style:{fontSize:12,color:'#16261C'}},(x.budgetFrom||x.budgetTo)?(x.budgetFrom||'')+(x.budgetTo?' - '+x.budgetTo:''):'—'),
-          R('span',{style:{fontSize:11,fontWeight:700,color:sc[0],background:sc[1],borderRadius:20,padding:'4px 10px',whiteSpace:'nowrap',display:'inline-block'}},x.requestStatus||'جديد'),
-          R('div',{style:{display:'flex',gap:5}},
-            R('button',{onClick:()=>this.openEditCR(x),style:{border:'none',borderRadius:7,padding:'7px 10px',background:'#16261C',color:'#fff',fontFamily:'inherit',fontSize:11.5,fontWeight:700,cursor:'pointer'}},'تعديل'),
-            R('button',{onClick:()=>this.deleteCR(x.id),style:{border:'none',borderRadius:7,padding:'7px 8px',background:'#FDECEC',color:'#E5484D',fontFamily:'inherit',fontSize:11.5,fontWeight:700,cursor:'pointer'}},'حذف')
+    const thS = {padding:'14px 12px',textAlign:'right',fontSize:11,color:'#AEB2B6',fontWeight:600,whiteSpace:'nowrap',borderBottom:'1px solid #F0F0F0'};
+
+    const crTable = clientRequests.length ? R('div',{style:{overflowX:'auto'}},
+      R('table',{dir:'rtl',style:{borderCollapse:'collapse',tableLayout:'auto',fontFamily:"'Plus Jakarta Sans',sans-serif",width:'auto'}},
+        R('thead',{},
+          R('tr',{},
+            R('th',{style:{...thS,paddingRight:20}},'رقم الطلب'),
+            R('th',{style:thS},'التاريخ'),
+            R('th',{style:thS},'الاسم'),
+            R('th',{style:thS},'الجوال'),
+            R('th',{style:thS},'نوع الطلب'),
+            R('th',{style:thS},'نوع العقار'),
+            R('th',{style:thS},'المدينة'),
+            R('th',{style:thS},'الميزانية'),
+            R('th',{style:thS},'الحالة'),
+            R('th',{style:{...thS,paddingLeft:20}})
           )
-        );
-      })
+        ),
+        R('tbody',{},
+          ...clientRequests.map((x,k) => {
+            const sc=crStatusC[x.requestStatus]||crStatusC['جديد'], tc=crTypeC[x.requestType]||crTypeC['شراء'];
+            const bdr=k<clientRequests.length-1?'1px solid #F4F4F4':'none';
+            const tds=(e={})=>({padding:'13px 12px',verticalAlign:'middle',borderBottom:bdr,...e});
+            return R('tr',{key:x.id},
+              R('td',{style:tds({paddingRight:20,fontSize:11.5,color:'#9AA0A6',fontFamily:'monospace'})},('#'+x.id.slice(-5)).toUpperCase()),
+              R('td',{style:tds({fontSize:12,color:'#5C6360'})},fmtDate(x.createdAt)),
+              R('td',{style:tds({})},
+                R('div',{style:{fontSize:13.5,fontWeight:700,color:'#16261C'}},(x.firstName||'')+' '+(x.lastName||'')),
+                x.assignedTo?R('div',{style:{fontSize:11.5,color:'#9AA0A6',marginTop:2}},'مكلف: '+x.assignedTo):null
+              ),
+              R('td',{style:tds({fontSize:12.5,color:'#5C6360'})},x.phone||'—'),
+              R('td',{style:tds({})},R('span',{style:{fontSize:11,fontWeight:700,color:tc[0],background:tc[1],borderRadius:20,padding:'4px 10px',whiteSpace:'nowrap',display:'inline-block'}},x.requestType||'شراء')),
+              R('td',{style:tds({fontSize:12.5,color:'#5C6360'})},x.propertyType||'—'),
+              R('td',{style:tds({fontSize:12.5,color:'#5C6360'})},x.city||'—'),
+              R('td',{style:tds({fontSize:12,color:'#16261C'})},(x.budgetFrom||x.budgetTo)?(x.budgetFrom||'')+(x.budgetTo?' - '+x.budgetTo:''):'—'),
+              R('td',{style:tds({})},R('span',{style:{fontSize:11,fontWeight:700,color:sc[0],background:sc[1],borderRadius:20,padding:'4px 10px',whiteSpace:'nowrap',display:'inline-block'}},x.requestStatus||'جديد')),
+              R('td',{style:tds({paddingLeft:20,whiteSpace:'nowrap'})},
+                R('button',{onClick:()=>this.openEditCR(x),style:{border:'none',borderRadius:7,padding:'7px 10px',background:'#16261C',color:'#fff',fontFamily:'inherit',fontSize:11.5,fontWeight:700,cursor:'pointer',marginLeft:4}},'تعديل'),
+                R('button',{onClick:()=>this.deleteCR(x.id),style:{border:'none',borderRadius:7,padding:'7px 8px',background:'#FDECEC',color:'#E5484D',fontFamily:'inherit',fontSize:11.5,fontWeight:700,cursor:'pointer'}},'حذف')
+              )
+            );
+          })
+        )
+      )
     ) : null;
 
     // ---------- PURCHASE / RENTAL CLIENTS ----------
@@ -1515,43 +1516,62 @@ class Component extends DCLogic {
     const dStatusC={'بانتظار':['#C98A1B','#FBF1DD'],'وافق':['#5FB13B','#EAF7E0'],'رفض':['#E5484D','#FDECEC']};
     const dealStatusC={'جارية':['#C98A1B','#FBF1DD'],'مكتملة':['#5FB13B','#EAF7E0'],'ملغية':['#E5484D','#FDECEC']};
     const contractStatusC={'جاري':['#C98A1B','#FBF1DD'],'موقع':['#5FB13B','#EAF7E0'],'ملغي':['#E5484D','#FDECEC']};
-    const pcRcGridCols = '70px 90px 1fr 100px 1fr 90px 100px 90px 90px 80px 100px 80px 90px 80px';
 
     const makePCRCRow = (x, k, list, lastCol, onEdit, onDelete) => {
       const vs=vStatusC[x.viewingStatus]||vStatusC['مجدولة'];
       const vr=vResultC[x.viewingResult]||null;
       const ds=dStatusC[x.decisionStatus]||dStatusC['بانتظار'];
       const priceVal=x.price||x.monthlyPrice;
-      return R('div',{key:x.id,style:{display:'grid',gridTemplateColumns:pcRcGridCols,gap:10,alignItems:'center',padding:'13px 20px',borderBottom:k<list.length-1?'1px solid #F4F4F4':'none'}},
-        R('div',{style:{fontSize:11.5,color:'#9AA0A6',fontFamily:'monospace'}},('#'+x.id.slice(-5)).toUpperCase()),
-        R('div',{style:{fontSize:12,color:'#5C6360'}},fmtDate(x.createdAt)),
-        R('div',{},
+      const bdr=k<list.length-1?'1px solid #F4F4F4':'none';
+      const tds=(e={})=>({padding:'13px 12px',verticalAlign:'middle',borderBottom:bdr,...e});
+      return R('tr',{key:x.id},
+        R('td',{style:tds({paddingRight:20,fontSize:11.5,color:'#9AA0A6',fontFamily:'monospace'})},('#'+x.id.slice(-5)).toUpperCase()),
+        R('td',{style:tds({fontSize:12,color:'#5C6360'})},fmtDate(x.createdAt)),
+        R('td',{style:tds({})},
           R('div',{style:{fontSize:13.5,fontWeight:700,color:'#16261C'}},(x.firstName||'')+' '+(x.lastName||'')),
           R('div',{style:{fontSize:11.5,color:'#9AA0A6',marginTop:2}},x.phone||'')
         ),
-        R('div',{style:{fontSize:12.5,color:'#5C6360'}},x.phone||'—'),
-        R('div',{},
+        R('td',{style:tds({fontSize:12.5,color:'#5C6360'})},x.phone||'—'),
+        R('td',{style:tds({})},
           R('div',{style:{fontSize:12.5,fontWeight:600,color:'#16261C'}},x.propertyTitle||'—'),
           x.propertyRef?R('div',{style:{fontSize:11,color:'#9AA0A6',marginTop:1}},x.propertyRef):null
         ),
-        R('div',{style:{fontSize:12.5,fontWeight:700,color:'#1F8A5B'}},priceVal?(Number(priceVal)||0).toLocaleString('en-US'):'—'),
-        R('div',{style:{fontSize:12,color:'#5C6360'}},x.viewingDate?(x.viewingDate+(x.viewingTime?' '+x.viewingTime:'')):'—'),
-        R('span',{style:{fontSize:11,fontWeight:700,color:vs[0],background:vs[1],borderRadius:20,padding:'4px 10px',whiteSpace:'nowrap',display:'inline-block'}},x.viewingStatus||'مجدولة'),
-        vr?R('span',{style:{fontSize:11,fontWeight:700,color:vr[0],background:vr[1],borderRadius:20,padding:'4px 10px',whiteSpace:'nowrap',display:'inline-block'}},x.viewingResult)
-          :R('span',{style:{fontSize:11.5,color:'#AEB2B6'}},'—'),
-        R('span',{style:{fontSize:11,fontWeight:700,color:ds[0],background:ds[1],borderRadius:20,padding:'4px 10px',whiteSpace:'nowrap',display:'inline-block'}},x.decisionStatus||'بانتظار'),
-        R('div',{style:{fontSize:12,color:'#5C6360'}},x.officeVisitDate?fmtDate(x.officeVisitDate):'—'),
-        R('div',{style:{fontSize:12,color:'#5C6360'}},x.officeVisitTime||'—'),
-        R('span',{style:{fontSize:11,fontWeight:700,color:lastCol[0],background:lastCol[1],borderRadius:20,padding:'4px 10px',whiteSpace:'nowrap',display:'inline-block'}},x.dealStatus||x.contractStatus||''),
-        R('div',{style:{display:'flex',gap:5}},
-          R('button',{onClick:()=>onEdit(x),style:{border:'none',borderRadius:7,padding:'7px 10px',background:'#16261C',color:'#fff',fontFamily:'inherit',fontSize:11.5,fontWeight:700,cursor:'pointer'}},'تعديل'),
+        R('td',{style:tds({fontSize:12.5,fontWeight:700,color:'#1F8A5B'})},priceVal?(Number(priceVal)||0).toLocaleString('en-US'):'—'),
+        R('td',{style:tds({fontSize:12,color:'#5C6360'})},x.viewingDate?(x.viewingDate+(x.viewingTime?' '+x.viewingTime:'')):'—'),
+        R('td',{style:tds({})},R('span',{style:{fontSize:11,fontWeight:700,color:vs[0],background:vs[1],borderRadius:20,padding:'4px 10px',whiteSpace:'nowrap',display:'inline-block'}},x.viewingStatus||'مجدولة')),
+        vr?R('td',{style:tds({})},R('span',{style:{fontSize:11,fontWeight:700,color:vr[0],background:vr[1],borderRadius:20,padding:'4px 10px',whiteSpace:'nowrap',display:'inline-block'}},x.viewingResult))
+          :R('td',{style:tds({})},R('span',{style:{fontSize:11.5,color:'#AEB2B6'}},'—')),
+        R('td',{style:tds({})},R('span',{style:{fontSize:11,fontWeight:700,color:ds[0],background:ds[1],borderRadius:20,padding:'4px 10px',whiteSpace:'nowrap',display:'inline-block'}},x.decisionStatus||'بانتظار')),
+        R('td',{style:tds({fontSize:12,color:'#5C6360'})},x.officeVisitDate?fmtDate(x.officeVisitDate):'—'),
+        R('td',{style:tds({fontSize:12,color:'#5C6360'})},x.officeVisitTime||'—'),
+        R('td',{style:tds({})},R('span',{style:{fontSize:11,fontWeight:700,color:lastCol[0],background:lastCol[1],borderRadius:20,padding:'4px 10px',whiteSpace:'nowrap',display:'inline-block'}},x.dealStatus||x.contractStatus||'')),
+        R('td',{style:tds({paddingLeft:20,whiteSpace:'nowrap'})},
+          R('button',{onClick:()=>onEdit(x),style:{border:'none',borderRadius:7,padding:'7px 10px',background:'#16261C',color:'#fff',fontFamily:'inherit',fontSize:11.5,fontWeight:700,cursor:'pointer',marginLeft:4}},'تعديل'),
           R('button',{onClick:()=>onDelete(x.id),style:{border:'none',borderRadius:7,padding:'7px 8px',background:'#FDECEC',color:'#E5484D',fontFamily:'inherit',fontSize:11.5,fontWeight:700,cursor:'pointer'}},'حذف')
         )
       );
     };
 
-    const pcRows = purchaseClients.length ? R('div',{}, purchaseClients.map((x,k)=>makePCRCRow(x,k,purchaseClients, dealStatusC[x.dealStatus]||dealStatusC['جارية'], (x)=>this.openEditPC(x), (id)=>this.deletePC(id)))) : null;
-    const rcRows = rentalClients.length   ? R('div',{}, rentalClients.map((x,k)=>makePCRCRow(x,k,rentalClients,   contractStatusC[x.contractStatus]||contractStatusC['جاري'], (x)=>this.openEditRC(x), (id)=>this.deleteRC(id)))) : null;
+    const makePCRCTable = (data, headers, lastColFn, onEdit, onDelete) => {
+      if (!data.length) return null;
+      return R('div',{style:{overflowX:'auto'}},
+        R('table',{dir:'rtl',style:{borderCollapse:'collapse',tableLayout:'auto',fontFamily:"'Plus Jakarta Sans',sans-serif",width:'auto'}},
+          R('thead',{},
+            R('tr',{},
+              ...headers.map((h,i)=>R('th',{key:i,style:{...thS,paddingRight:i===0?20:12,paddingLeft:i===headers.length-1?20:12}},h))
+            )
+          ),
+          R('tbody',{},
+            ...data.map((x,k)=>makePCRCRow(x,k,data,lastColFn(x),onEdit,onDelete))
+          )
+        )
+      );
+    };
+
+    const pcHeaders=['رقم العملية','التاريخ','الاسم','الجوال','العقار','السعر','موعد المعاينة','حالة المعاينة','نتيجة المعاينة','حالة القرار','تاريخ زيارة المكتب','وقت الزيارة','حالة الصفقة',''];
+    const rcHeaders=['رقم العملية','التاريخ','الاسم','الجوال','العقار','السعر الشهري','موعد المعاينة','حالة المعاينة','نتيجة المعاينة','حالة القرار','تاريخ زيارة المكتب','وقت الزيارة','حالة العقد',''];
+    const pcTable=makePCRCTable(purchaseClients,pcHeaders,x=>dealStatusC[x.dealStatus]||dealStatusC['جارية'],x=>this.openEditPC(x),id=>this.deletePC(id));
+    const rcTable=makePCRCTable(rentalClients,rcHeaders,x=>contractStatusC[x.contractStatus]||contractStatusC['جاري'],x=>this.openEditRC(x),id=>this.deleteRC(id));
 
     // prop select options for PC/RC forms
     const propSelectOpts = [
@@ -1671,17 +1691,17 @@ class Component extends DCLogic {
       bTabAllClick, bTabTodayClick, bTabUpcomingClick, bTabPastClick,
       bCountAll: bAll.length, bCountToday: bToday.length,
       bCountUpcoming: bUpcoming.length, bCountPast: bPast.length,
-      crRows, noCR: clientRequests.length===0,
+      crTable, noCR: clientRequests.length===0,
       showCRForm: this.state.showCRForm, openCRForm: this.openCRForm, closeCRForm: this.closeCRForm,
       stopCR: this.stopCR, saveCR: this.saveCR,
       crFormTitle: this.state.editCRId?'تعديل الطلب':'طلب جديد',
       crSaveLabel: this.state.editCRId?'حفظ التعديلات':'إنشاء الطلب',
-      pcRows, noPC: purchaseClients.length===0,
+      pcTable, noPC: purchaseClients.length===0,
       showPCForm: this.state.showPCForm, openPCForm: this.openPCForm, closePCForm: this.closePCForm,
       stopPC: this.stopPC, savePC: this.savePC, onPCPropSelect: this.onPCPropSelect,
       pcFormTitle: this.state.editPCId?'تعديل عميل شراء':'عميل شراء جديد',
       pcSaveLabel: this.state.editPCId?'حفظ التعديلات':'إنشاء',
-      rcRows, noRC: rentalClients.length===0,
+      rcTable, noRC: rentalClients.length===0,
       showRCForm: this.state.showRCForm, openRCForm: this.openRCForm, closeRCForm: this.closeRCForm,
       stopRC: this.stopRC, saveRC: this.saveRC, onRCPropSelect: this.onRCPropSelect,
       rcFormTitle: this.state.editRCId?'تعديل عميل استئجار':'عميل استئجار جديد',
