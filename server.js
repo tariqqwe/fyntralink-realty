@@ -204,11 +204,13 @@ app.delete('/api/upload/:filename', (req, res) => {
 
 // ── GET /api/search ───────────────────────────────────────────────────────────
 app.get('/api/search', (req, res) => {
-  const q = (req.query.q || '').trim().toLowerCase();
+  let raw = req.query.q || '';
+  try { raw = decodeURIComponent(raw); } catch(e) { /* already decoded */ }
+  const q = raw.trim().normalize('NFC').toLowerCase();
   if (!q) return res.json(readProps());
   const results = readProps().filter(p =>
     [p.title, p.city, p.district, p.type, p.ref, p.address, p.description]
-      .join(' ').toLowerCase().includes(q)
+      .join(' ').normalize('NFC').toLowerCase().includes(q)
   );
   res.json(results);
 });
