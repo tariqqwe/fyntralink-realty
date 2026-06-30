@@ -328,13 +328,14 @@
           savedTaValues[ta.id] = ta.value;
         });
 
-        // Save all form fields: [data-f] = property form, [data-bf] = booking form
+        // Save all form fields across all form types
+        var _formAttrs = ['data-f','data-bf','data-crf','data-pcf','data-rcf'];
         var savedFieldValues = null;
-        var fieldEls = Array.from(self._container.querySelectorAll('[data-f],[data-bf]'));
+        var fieldEls = Array.from(self._container.querySelectorAll(_formAttrs.map(function(a){return '['+a+']';}).join(',')));
         if (fieldEls.length > 0) {
           savedFieldValues = {};
           fieldEls.forEach(function(el) {
-            var attr = el.hasAttribute('data-f') ? 'data-f' : 'data-bf';
+            var attr = _formAttrs.find(function(a){ return el.hasAttribute(a); }) || 'data-f';
             var key  = attr + '=' + el.getAttribute(attr);
             savedFieldValues[key] = el.type === 'checkbox' ? el.checked : el.value;
           });

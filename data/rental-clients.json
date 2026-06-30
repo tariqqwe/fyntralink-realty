@@ -1,0 +1,26 @@
+[
+  {
+    "id": "rc1782814056419",
+    "createdAt": "2026-06-30T10:07:36.419Z",
+    "updatedAt": "2026-06-30T10:07:36.419Z",
+    "firstName": "عمر",
+    "lastName": "السلمي",
+    "phone": "0507778899",
+    "propertyTitle": "شقة المروج",
+    "propertyRef": "",
+    "propertyType": "",
+    "city": "",
+    "district": "",
+    "monthlyPrice": "3500",
+    "viewingDate": "",
+    "viewingTime": "",
+    "viewingStatus": "مكتملة",
+    "viewingResult": "",
+    "alternativeProperty": "",
+    "decisionStatus": "بانتظار",
+    "officeVisitDate": "",
+    "officeVisitTime": "",
+    "contractStatus": "موقع",
+    "notes": ""
+  }
+]

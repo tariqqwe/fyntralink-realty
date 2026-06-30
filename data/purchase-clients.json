@@ -1,0 +1,26 @@
+[
+  {
+    "id": "pc1782814056394",
+    "createdAt": "2026-06-30T10:07:36.394Z",
+    "updatedAt": "2026-06-30T10:07:36.394Z",
+    "firstName": "سارة",
+    "lastName": "المطيري",
+    "phone": "0501111222",
+    "propertyTitle": "فيلا النرجس",
+    "propertyRef": "",
+    "propertyType": "",
+    "city": "",
+    "district": "",
+    "price": "1500000",
+    "viewingDate": "",
+    "viewingTime": "",
+    "viewingStatus": "مجدولة",
+    "viewingResult": "",
+    "alternativeProperty": "",
+    "decisionStatus": "بانتظار",
+    "officeVisitDate": "",
+    "officeVisitTime": "",
+    "dealStatus": "جارية",
+    "notes": ""
+  }
+]

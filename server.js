@@ -300,6 +300,104 @@ app.delete('/api/bookings/:id', (req, res) => {
 // ── GET /api/ai/bookings ──────────────────────────────────────────────────────
 app.get('/api/ai/bookings', (_req, res) => res.json(readBookings()));
 
+// ── Client Requests / Purchase Clients / Rental Clients ──────────────────────
+const CLIENT_REQUESTS_FILE  = path.join(__dirname, 'data', 'client-requests.json');
+const PURCHASE_CLIENTS_FILE = path.join(__dirname, 'data', 'purchase-clients.json');
+const RENTAL_CLIENTS_FILE   = path.join(__dirname, 'data', 'rental-clients.json');
+
+function readClientRequests()   { try { return JSON.parse(fs.readFileSync(CLIENT_REQUESTS_FILE,  'utf8')); } catch { return []; } }
+function writeClientRequests(d) { fs.writeFileSync(CLIENT_REQUESTS_FILE,  JSON.stringify(d,null,2),'utf8'); }
+function readPurchaseClients()  { try { return JSON.parse(fs.readFileSync(PURCHASE_CLIENTS_FILE, 'utf8')); } catch { return []; } }
+function writePurchaseClients(d){ fs.writeFileSync(PURCHASE_CLIENTS_FILE, JSON.stringify(d,null,2),'utf8'); }
+function readRentalClients()    { try { return JSON.parse(fs.readFileSync(RENTAL_CLIENTS_FILE,   'utf8')); } catch { return []; } }
+function writeRentalClients(d)  { fs.writeFileSync(RENTAL_CLIENTS_FILE,   JSON.stringify(d,null,2),'utf8'); }
+
+const crFields = ['firstName','lastName','phone','requestType','propertyType','city','preferredDistrict','bedrooms','bathrooms','areaNeeded','budgetFrom','budgetTo','furnished','clientNotes','requestStatus','assignedTo'];
+const pcFields = ['firstName','lastName','phone','propertyTitle','propertyRef','propertyType','city','district','price','viewingDate','viewingTime','viewingStatus','viewingResult','alternativeProperty','decisionStatus','officeVisitDate','officeVisitTime','dealStatus','notes'];
+const rcFields = ['firstName','lastName','phone','propertyTitle','propertyRef','propertyType','city','district','monthlyPrice','viewingDate','viewingTime','viewingStatus','viewingResult','alternativeProperty','decisionStatus','officeVisitDate','officeVisitTime','contractStatus','notes'];
+
+function mergeFields(p, b, fields) {
+  const out = { id:p.id, createdAt:p.createdAt, updatedAt:new Date().toISOString() };
+  fields.forEach(k => { out[k] = k in b ? (k==='furnished'?!!b[k]:b[k]) : p[k]; });
+  return out;
+}
+
+app.get('/api/client-requests', (_req, res) => res.json(readClientRequests()));
+app.post('/api/client-requests', (req, res) => {
+  const list=readClientRequests(), now=new Date().toISOString(), b=req.body;
+  const item={id:'cr'+Date.now(),createdAt:now,updatedAt:now,
+    firstName:b.firstName||'',lastName:b.lastName||'',phone:b.phone||'',
+    requestType:b.requestType||'شراء',propertyType:b.propertyType||'شقة',
+    city:b.city||'',preferredDistrict:b.preferredDistrict||'',
+    bedrooms:b.bedrooms||'',bathrooms:b.bathrooms||'',areaNeeded:b.areaNeeded||'',
+    budgetFrom:b.budgetFrom||'',budgetTo:b.budgetTo||'',furnished:!!b.furnished,
+    clientNotes:b.clientNotes||'',requestStatus:b.requestStatus||'جديد',assignedTo:b.assignedTo||''};
+  list.unshift(item); writeClientRequests(list); res.status(201).json(item);
+});
+app.put('/api/client-requests/:id', (req, res) => {
+  const list=readClientRequests(), idx=list.findIndex(x=>x.id===req.params.id);
+  if(idx===-1) return res.status(404).json({error:'Not found'});
+  list[idx]=mergeFields(list[idx],req.body,crFields); writeClientRequests(list); res.json(list[idx]);
+});
+app.delete('/api/client-requests/:id', (req, res) => {
+  const list=readClientRequests();
+  if(!list.find(x=>x.id===req.params.id)) return res.status(404).json({error:'Not found'});
+  writeClientRequests(list.filter(x=>x.id!==req.params.id)); res.json({ok:true});
+});
+app.get('/api/ai/client-requests', (_req, res) => res.json(readClientRequests()));
+
+app.get('/api/purchase-clients', (_req, res) => res.json(readPurchaseClients()));
+app.post('/api/purchase-clients', (req, res) => {
+  const list=readPurchaseClients(), now=new Date().toISOString(), b=req.body;
+  const item={id:'pc'+Date.now(),createdAt:now,updatedAt:now,
+    firstName:b.firstName||'',lastName:b.lastName||'',phone:b.phone||'',
+    propertyTitle:b.propertyTitle||'',propertyRef:b.propertyRef||'',
+    propertyType:b.propertyType||'',city:b.city||'',district:b.district||'',
+    price:b.price||'',viewingDate:b.viewingDate||'',viewingTime:b.viewingTime||'',
+    viewingStatus:b.viewingStatus||'مجدولة',viewingResult:b.viewingResult||'',
+    alternativeProperty:b.alternativeProperty||'',decisionStatus:b.decisionStatus||'بانتظار',
+    officeVisitDate:b.officeVisitDate||'',officeVisitTime:b.officeVisitTime||'',
+    dealStatus:b.dealStatus||'جارية',notes:b.notes||''};
+  list.unshift(item); writePurchaseClients(list); res.status(201).json(item);
+});
+app.put('/api/purchase-clients/:id', (req, res) => {
+  const list=readPurchaseClients(), idx=list.findIndex(x=>x.id===req.params.id);
+  if(idx===-1) return res.status(404).json({error:'Not found'});
+  list[idx]=mergeFields(list[idx],req.body,pcFields); writePurchaseClients(list); res.json(list[idx]);
+});
+app.delete('/api/purchase-clients/:id', (req, res) => {
+  const list=readPurchaseClients();
+  if(!list.find(x=>x.id===req.params.id)) return res.status(404).json({error:'Not found'});
+  writePurchaseClients(list.filter(x=>x.id!==req.params.id)); res.json({ok:true});
+});
+app.get('/api/ai/purchase-clients', (_req, res) => res.json(readPurchaseClients()));
+
+app.get('/api/rental-clients', (_req, res) => res.json(readRentalClients()));
+app.post('/api/rental-clients', (req, res) => {
+  const list=readRentalClients(), now=new Date().toISOString(), b=req.body;
+  const item={id:'rc'+Date.now(),createdAt:now,updatedAt:now,
+    firstName:b.firstName||'',lastName:b.lastName||'',phone:b.phone||'',
+    propertyTitle:b.propertyTitle||'',propertyRef:b.propertyRef||'',
+    propertyType:b.propertyType||'',city:b.city||'',district:b.district||'',
+    monthlyPrice:b.monthlyPrice||'',viewingDate:b.viewingDate||'',viewingTime:b.viewingTime||'',
+    viewingStatus:b.viewingStatus||'مجدولة',viewingResult:b.viewingResult||'',
+    alternativeProperty:b.alternativeProperty||'',decisionStatus:b.decisionStatus||'بانتظار',
+    officeVisitDate:b.officeVisitDate||'',officeVisitTime:b.officeVisitTime||'',
+    contractStatus:b.contractStatus||'جاري',notes:b.notes||''};
+  list.unshift(item); writeRentalClients(list); res.status(201).json(item);
+});
+app.put('/api/rental-clients/:id', (req, res) => {
+  const list=readRentalClients(), idx=list.findIndex(x=>x.id===req.params.id);
+  if(idx===-1) return res.status(404).json({error:'Not found'});
+  list[idx]=mergeFields(list[idx],req.body,rcFields); writeRentalClients(list); res.json(list[idx]);
+});
+app.delete('/api/rental-clients/:id', (req, res) => {
+  const list=readRentalClients();
+  if(!list.find(x=>x.id===req.params.id)) return res.status(404).json({error:'Not found'});
+  writeRentalClients(list.filter(x=>x.id!==req.params.id)); res.json({ok:true});
+});
+app.get('/api/ai/rental-clients', (_req, res) => res.json(readRentalClients()));
+
 // ── GET /api/ai/summary ───────────────────────────────────────────────────────
 app.get('/api/ai/summary', (req, res) => {
   const props = readProps();

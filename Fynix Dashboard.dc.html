@@ -80,6 +80,18 @@
         <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="16" rx="2" stroke="currentColor" stroke-width="1.8"></rect><path d="M3 9h18" stroke="currentColor" stroke-width="1.8"></path><path d="M8 2v4M16 2v4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path></svg>
         <span class="sb-nav-text">Bookings</span>
       </div>
+      <div onClick="{{ goClientRequests }}" onMouseenter="{{ crMEnter }}" onMouseleave="{{ crMLeave }}" style="{{ crStyle }}">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><rect x="5" y="3" width="14" height="18" rx="2" stroke="currentColor" stroke-width="1.8"></rect><path d="M9 7h6M9 11h6M9 15h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path></svg>
+        <span class="sb-nav-text">طلبات عملاء</span>
+      </div>
+      <div onClick="{{ goPurchaseClients }}" onMouseenter="{{ pcMEnter }}" onMouseleave="{{ pcMLeave }}" style="{{ pcStyle }}">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"></path><path d="M3 6h18" stroke="currentColor" stroke-width="1.8"></path><path d="M16 10a4 4 0 0 1-8 0" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path></svg>
+        <span class="sb-nav-text">عملاء شراء</span>
+      </div>
+      <div onClick="{{ goRentalClients }}" onMouseenter="{{ rcMEnter }}" onMouseleave="{{ rcMLeave }}" style="{{ rcStyle }}">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        <span class="sb-nav-text">عملاء استئجار</span>
+      </div>
     </nav>
 
     
@@ -413,6 +425,96 @@
       </div>
     </div>
    </sc-if>
+
+   <!-- ============ CLIENT REQUESTS PAGE ============ -->
+   <sc-if value="{{ isClientRequests }}" hint-placeholder-val="{{ false }}">
+    <div dir="rtl" style="font-family:'Plus Jakarta Sans',sans-serif;">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:26px;">
+        <div>
+          <div style="font-size:13px;color:#9AA0A6;">تطبيق العقارات</div>
+          <div style="font-size:28px;font-weight:800;margin-top:7px;">طلبات العملاء</div>
+        </div>
+        <button onClick="{{ openCRForm }}" style="display:flex;align-items:center;gap:7px;border:none;border-radius:12px;padding:11px 18px;background:#16261C;color:#FFFFFF;font-family:inherit;font-size:13.5px;font-weight:700;cursor:pointer;"><span style="font-size:15px;">＋</span> طلب جديد</button>
+      </div>
+      <div style="background:#FFFFFF;border:1px solid #ECECEC;border-radius:20px;overflow:hidden;">
+        <div style="overflow-x:auto;">
+          <div style="min-width:980px;">
+            <div style="display:grid;grid-template-columns:70px 90px 1.2fr 110px 80px 80px 90px 1fr 110px 80px;gap:10px;padding:14px 20px;border-bottom:1px solid #F0F0F0;font-size:11px;color:#AEB2B6;font-weight:600;">
+              <div>رقم الطلب</div><div>التاريخ</div><div>الاسم</div><div>الجوال</div><div>نوع الطلب</div><div>نوع العقار</div><div>المدينة</div><div>الميزانية</div><div>الحالة</div><div></div>
+            </div>
+            {{ crRows }}
+          </div>
+        </div>
+        <sc-if value="{{ noCR }}" hint-placeholder-val="{{ false }}">
+          <div style="text-align:center;padding:60px 20px;color:#9AA0A6;">
+            <div style="font-size:46px;">📋</div>
+            <div style="font-size:15px;font-weight:600;margin-top:12px;color:#5C6360;">لا توجد طلبات</div>
+            <div style="font-size:13px;margin-top:4px;">أضف طلب عميل جديدًا</div>
+          </div>
+        </sc-if>
+      </div>
+    </div>
+   </sc-if>
+
+   <!-- ============ PURCHASE CLIENTS PAGE ============ -->
+   <sc-if value="{{ isPurchaseClients }}" hint-placeholder-val="{{ false }}">
+    <div dir="rtl" style="font-family:'Plus Jakarta Sans',sans-serif;">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:26px;">
+        <div>
+          <div style="font-size:13px;color:#9AA0A6;">تطبيق العقارات</div>
+          <div style="font-size:28px;font-weight:800;margin-top:7px;">عملاء الشراء</div>
+        </div>
+        <button onClick="{{ openPCForm }}" style="display:flex;align-items:center;gap:7px;border:none;border-radius:12px;padding:11px 18px;background:#16261C;color:#FFFFFF;font-family:inherit;font-size:13.5px;font-weight:700;cursor:pointer;"><span style="font-size:15px;">＋</span> عميل جديد</button>
+      </div>
+      <div style="background:#FFFFFF;border:1px solid #ECECEC;border-radius:20px;overflow:hidden;">
+        <div style="overflow-x:auto;">
+          <div style="min-width:1200px;">
+            <div style="display:grid;grid-template-columns:70px 90px 1fr 100px 1fr 90px 100px 90px 90px 80px 90px 80px;gap:10px;padding:14px 20px;border-bottom:1px solid #F0F0F0;font-size:11px;color:#AEB2B6;font-weight:600;">
+              <div>رقم العملية</div><div>التاريخ</div><div>الاسم</div><div>الجوال</div><div>العقار</div><div>السعر</div><div>موعد المعاينة</div><div>حالة المعاينة</div><div>نتيجة المعاينة</div><div>حالة القرار</div><div>حالة الصفقة</div><div></div>
+            </div>
+            {{ pcRows }}
+          </div>
+        </div>
+        <sc-if value="{{ noPC }}" hint-placeholder-val="{{ false }}">
+          <div style="text-align:center;padding:60px 20px;color:#9AA0A6;">
+            <div style="font-size:46px;">🛍️</div>
+            <div style="font-size:15px;font-weight:600;margin-top:12px;color:#5C6360;">لا يوجد عملاء شراء</div>
+            <div style="font-size:13px;margin-top:4px;">أضف عميل شراء جديدًا</div>
+          </div>
+        </sc-if>
+      </div>
+    </div>
+   </sc-if>
+
+   <!-- ============ RENTAL CLIENTS PAGE ============ -->
+   <sc-if value="{{ isRentalClients }}" hint-placeholder-val="{{ false }}">
+    <div dir="rtl" style="font-family:'Plus Jakarta Sans',sans-serif;">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:26px;">
+        <div>
+          <div style="font-size:13px;color:#9AA0A6;">تطبيق العقارات</div>
+          <div style="font-size:28px;font-weight:800;margin-top:7px;">عملاء الاستئجار</div>
+        </div>
+        <button onClick="{{ openRCForm }}" style="display:flex;align-items:center;gap:7px;border:none;border-radius:12px;padding:11px 18px;background:#16261C;color:#FFFFFF;font-family:inherit;font-size:13.5px;font-weight:700;cursor:pointer;"><span style="font-size:15px;">＋</span> عميل جديد</button>
+      </div>
+      <div style="background:#FFFFFF;border:1px solid #ECECEC;border-radius:20px;overflow:hidden;">
+        <div style="overflow-x:auto;">
+          <div style="min-width:1200px;">
+            <div style="display:grid;grid-template-columns:70px 90px 1fr 100px 1fr 90px 100px 90px 90px 80px 90px 80px;gap:10px;padding:14px 20px;border-bottom:1px solid #F0F0F0;font-size:11px;color:#AEB2B6;font-weight:600;">
+              <div>رقم العملية</div><div>التاريخ</div><div>الاسم</div><div>الجوال</div><div>العقار</div><div>السعر الشهري</div><div>موعد المعاينة</div><div>حالة المعاينة</div><div>نتيجة المعاينة</div><div>حالة القرار</div><div>حالة العقد</div><div></div>
+            </div>
+            {{ rcRows }}
+          </div>
+        </div>
+        <sc-if value="{{ noRC }}" hint-placeholder-val="{{ false }}">
+          <div style="text-align:center;padding:60px 20px;color:#9AA0A6;">
+            <div style="font-size:46px;">🔑</div>
+            <div style="font-size:15px;font-weight:600;margin-top:12px;color:#5C6360;">لا يوجد عملاء استئجار</div>
+            <div style="font-size:13px;margin-top:4px;">أضف عميل استئجار جديدًا</div>
+          </div>
+        </sc-if>
+      </div>
+    </div>
+   </sc-if>
   </main>
 
   <!-- ============ NEW PROPERTY FORM MODAL ============ -->
@@ -661,6 +763,142 @@
       </div>
     </div>
   </sc-if>
+
+  <!-- ============ CLIENT REQUESTS FORM ============ -->
+  <sc-if value="{{ showCRForm }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ closeCRForm }}" style="position:fixed;inset:0;z-index:1002;background:rgba(15,25,18,0.45);display:flex;align-items:flex-start;justify-content:center;overflow-y:auto;padding:32px 16px;">
+      <div data-cr-form-root="1" dir="rtl" onClick="{{ stopCR }}" style="width:90%;max-width:680px;background:#FFFFFF;border-radius:22px;padding:28px 30px;box-shadow:0 30px 80px rgba(0,0,0,0.3);font-family:'Plus Jakarta Sans',sans-serif;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:22px;">
+          <span style="font-size:22px;font-weight:800;">{{ crFormTitle }}</span>
+          <button onClick="{{ closeCRForm }}" style="width:34px;height:34px;border-radius:10px;border:1px solid #ECECEC;background:#FFFFFF;cursor:pointer;font-size:16px;color:#5C6360;">✕</button>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+          <div><label style="display:block;text-align:right;font-size:13px;color:#5C6360;margin-bottom:8px;font-weight:500;">الاسم الأول <span style="color:#E5484D;">*</span></label><input type="text" data-crf="firstName" style="width:100%;padding:12px 14px;border:1px solid #ECECEC;border-radius:12px;font-family:inherit;font-size:14px;color:#16261C;background:#fff;text-align:right;outline:none;box-sizing:border-box;"></div>
+          <div><label style="display:block;text-align:right;font-size:13px;color:#5C6360;margin-bottom:8px;font-weight:500;">الاسم الأخير</label><input type="text" data-crf="lastName" style="width:100%;padding:12px 14px;border:1px solid #ECECEC;border-radius:12px;font-family:inherit;font-size:14px;color:#16261C;background:#fff;text-align:right;outline:none;box-sizing:border-box;"></div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px;">
+          <div><label style="display:block;text-align:right;font-size:13px;color:#5C6360;margin-bottom:8px;font-weight:500;">رقم الجوال <span style="color:#E5484D;">*</span></label><input type="text" data-crf="phone" style="width:100%;padding:12px 14px;border:1px solid #ECECEC;border-radius:12px;font-family:inherit;font-size:14px;color:#16261C;background:#fff;text-align:right;outline:none;box-sizing:border-box;"></div>
+          <div><label style="display:block;text-align:right;font-size:13px;color:#5C6360;margin-bottom:8px;font-weight:500;">نوع الطلب</label><div style="position:relative;"><select data-crf="requestType" style="width:100%;padding:12px 14px;border:1px solid #ECECEC;border-radius:12px;font-family:inherit;font-size:14px;color:#16261C;background:#fff;text-align:right;outline:none;appearance:none;-webkit-appearance:none;box-sizing:border-box;"><option value="شراء">شراء</option><option value="إيجار">إيجار</option></select><svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="position:absolute;left:14px;top:50%;transform:translateY(-50%);pointer-events:none;"><path d="M6 9l6 6 6-6" stroke="#5C6360" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg></div></div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px;">
+          <div><label style="display:block;text-align:right;font-size:13px;color:#5C6360;margin-bottom:8px;font-weight:500;">نوع العقار</label><div style="position:relative;"><select data-crf="propertyType" style="width:100%;padding:12px 14px;border:1px solid #ECECEC;border-radius:12px;font-family:inherit;font-size:14px;color:#16261C;background:#fff;text-align:right;outline:none;appearance:none;-webkit-appearance:none;box-sizing:border-box;"><option value="شقة">شقة</option><option value="فيلا">فيلا</option><option value="أرض">أرض</option><option value="مكتب">مكتب</option><option value="عمارة">عمارة</option></select><svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="position:absolute;left:14px;top:50%;transform:translateY(-50%);pointer-events:none;"><path d="M6 9l6 6 6-6" stroke="#5C6360" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg></div></div>
+          <div><label style="display:block;text-align:right;font-size:13px;color:#5C6360;margin-bottom:8px;font-weight:500;">المدينة</label><input type="text" data-crf="city" style="width:100%;padding:12px 14px;border:1px solid #ECECEC;border-radius:12px;font-family:inherit;font-size:14px;color:#16261C;background:#fff;text-align:right;outline:none;box-sizing:border-box;"></div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-top:16px;">
+          <div><label style="display:block;text-align:right;font-size:13px;color:#5C6360;margin-bottom:8px;font-weight:500;">الحي المفضل</label><input type="text" data-crf="preferredDistrict" style="width:100%;padding:12px 14px;border:1px solid #ECECEC;border-radius:12px;font-family:inherit;font-size:14px;color:#16261C;background:#fff;text-align:right;outline:none;box-sizing:border-box;"></div>
+          <div><label style="display:block;text-align:right;font-size:13px;color:#5C6360;margin-bottom:8px;font-weight:500;">غرف النوم</label><input type="number" data-crf="bedrooms" style="width:100%;padding:12px 14px;border:1px solid #ECECEC;border-radius:12px;font-family:inherit;font-size:14px;color:#16261C;background:#fff;text-align:right;outline:none;box-sizing:border-box;"></div>
+          <div><label style="display:block;text-align:right;font-size:13px;color:#5C6360;margin-bottom:8px;font-weight:500;">دورات المياه</label><input type="number" data-crf="bathrooms" style="width:100%;padding:12px 14px;border:1px solid #ECECEC;border-radius:12px;font-family:inherit;font-size:14px;color:#16261C;background:#fff;text-align:right;outline:none;box-sizing:border-box;"></div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-top:16px;">
+          <div><label style="display:block;text-align:right;font-size:13px;color:#5C6360;margin-bottom:8px;font-weight:500;">المساحة م²</label><input type="number" data-crf="areaNeeded" style="width:100%;padding:12px 14px;border:1px solid #ECECEC;border-radius:12px;font-family:inherit;font-size:14px;color:#16261C;background:#fff;text-align:right;outline:none;box-sizing:border-box;"></div>
+          <div><label style="display:block;text-align:right;font-size:13px;color:#5C6360;margin-bottom:8px;font-weight:500;">الميزانية من</label><input type="number" data-crf="budgetFrom" style="width:100%;padding:12px 14px;border:1px solid #ECECEC;border-radius:12px;font-family:inherit;font-size:14px;color:#16261C;background:#fff;text-align:right;outline:none;box-sizing:border-box;"></div>
+          <div><label style="display:block;text-align:right;font-size:13px;color:#5C6360;margin-bottom:8px;font-weight:500;">الميزانية إلى</label><input type="number" data-crf="budgetTo" style="width:100%;padding:12px 14px;border:1px solid #ECECEC;border-radius:12px;font-family:inherit;font-size:14px;color:#16261C;background:#fff;text-align:right;outline:none;box-sizing:border-box;"></div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px;align-items:end;">
+          <div><label style="display:block;text-align:right;font-size:13px;color:#5C6360;margin-bottom:8px;font-weight:500;">الحالة</label><div style="position:relative;"><select data-crf="requestStatus" style="width:100%;padding:12px 14px;border:1px solid #ECECEC;border-radius:12px;font-family:inherit;font-size:14px;color:#16261C;background:#fff;text-align:right;outline:none;appearance:none;-webkit-appearance:none;box-sizing:border-box;"><option value="جديد">جديد</option><option value="جاري البحث">جاري البحث</option><option value="تم التوفير">تم التوفير</option><option value="ملغي">ملغي</option></select><svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="position:absolute;left:14px;top:50%;transform:translateY(-50%);pointer-events:none;"><path d="M6 9l6 6 6-6" stroke="#5C6360" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg></div></div>
+          <div><label style="display:block;text-align:right;font-size:13px;color:#5C6360;margin-bottom:8px;font-weight:500;">المسؤول</label><input type="text" data-crf="assignedTo" style="width:100%;padding:12px 14px;border:1px solid #ECECEC;border-radius:12px;font-family:inherit;font-size:14px;color:#16261C;background:#fff;text-align:right;outline:none;box-sizing:border-box;"></div>
+        </div>
+        <div style="margin-top:16px;padding-bottom:4px;"><label style="display:flex;align-items:center;gap:8px;font-size:13px;color:#16261C;cursor:pointer;justify-content:flex-end;"><input type="checkbox" data-crf="furnished" style="width:16px;height:16px;accent-color:#5FB13B;"> مفروش</label></div>
+        <div style="margin-top:16px;"><label style="display:block;text-align:right;font-size:13px;color:#5C6360;margin-bottom:8px;font-weight:500;">ملاحظات العميل</label><textarea data-crf="clientNotes" rows="3" style="width:100%;padding:12px 14px;border:1px solid #ECECEC;border-radius:12px;font-family:inherit;font-size:14px;color:#16261C;background:#fff;text-align:right;outline:none;resize:vertical;box-sizing:border-box;"></textarea></div>
+        <div style="display:flex;gap:14px;align-items:center;margin-top:26px;border-top:1px solid #F0F0F0;padding-top:20px;">
+          <button onClick="{{ saveCR }}" style="flex:1;border:none;border-radius:14px;padding:14px;background:#8BD850;color:#16261C;font-family:inherit;font-size:14.5px;font-weight:700;cursor:pointer;">{{ crSaveLabel }}</button>
+          <button onClick="{{ closeCRForm }}" style="border:1px solid #ECECEC;border-radius:14px;padding:14px 24px;background:#FFFFFF;color:#5C6360;font-family:inherit;font-size:14px;font-weight:600;cursor:pointer;">إلغاء</button>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- ============ PURCHASE CLIENTS FORM ============ -->
+  <sc-if value="{{ showPCForm }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ closePCForm }}" style="position:fixed;inset:0;z-index:1002;background:rgba(15,25,18,0.45);display:flex;align-items:flex-start;justify-content:center;overflow-y:auto;padding:32px 16px;">
+      <div data-pc-form-root="1" dir="rtl" onClick="{{ stopPC }}" style="width:90%;max-width:700px;background:#FFFFFF;border-radius:22px;padding:28px 30px;box-shadow:0 30px 80px rgba(0,0,0,0.3);font-family:'Plus Jakarta Sans',sans-serif;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:22px;">
+          <span style="font-size:22px;font-weight:800;">{{ pcFormTitle }}</span>
+          <button onClick="{{ closePCForm }}" style="width:34px;height:34px;border-radius:10px;border:1px solid #ECECEC;background:#FFFFFF;cursor:pointer;font-size:16px;color:#5C6360;">✕</button>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+          <div><label style="display:block;text-align:right;font-size:13px;color:#5C6360;margin-bottom:8px;font-weight:500;">الاسم الأول <span style="color:#E5484D;">*</span></label><input type="text" data-pcf="firstName" style="width:100%;padding:12px 14px;border:1px solid #ECECEC;border-radius:12px;font-family:inherit;font-size:14px;color:#16261C;background:#fff;text-align:right;outline:none;box-sizing:border-box;"></div>
+          <div><label style="display:block;text-align:right;font-size:13px;color:#5C6360;margin-bottom:8px;font-weight:500;">الاسم الأخير</label><input type="text" data-pcf="lastName" style="width:100%;padding:12px 14px;border:1px solid #ECECEC;border-radius:12px;font-family:inherit;font-size:14px;color:#16261C;background:#fff;text-align:right;outline:none;box-sizing:border-box;"></div>
+        </div>
+        <div style="margin-top:16px;"><label style="display:block;text-align:right;font-size:13px;color:#5C6360;margin-bottom:8px;font-weight:500;">رقم الجوال</label><input type="text" data-pcf="phone" style="width:100%;padding:12px 14px;border:1px solid #ECECEC;border-radius:12px;font-family:inherit;font-size:14px;color:#16261C;background:#fff;text-align:right;outline:none;box-sizing:border-box;"></div>
+        <div style="margin-top:16px;"><label style="display:block;text-align:right;font-size:13px;color:#5C6360;margin-bottom:8px;font-weight:500;">العقار</label><div style="position:relative;"><select data-pcf="propertyTitle" onChange="{{ onPCPropSelect }}" style="width:100%;padding:12px 14px;border:1px solid #ECECEC;border-radius:12px;font-family:inherit;font-size:14px;color:#16261C;background:#fff;text-align:right;outline:none;appearance:none;-webkit-appearance:none;box-sizing:border-box;">{{ propSelectOpts }}</select><svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="position:absolute;left:14px;top:50%;transform:translateY(-50%);pointer-events:none;"><path d="M6 9l6 6 6-6" stroke="#5C6360" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg></div></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-top:16px;">
+          <div><label style="display:block;text-align:right;font-size:13px;color:#5C6360;margin-bottom:8px;font-weight:500;">رقم المرجع</label><input type="text" data-pcf="propertyRef" style="width:100%;padding:12px 14px;border:1px solid #ECECEC;border-radius:12px;font-family:inherit;font-size:14px;color:#16261C;background:#fff;text-align:right;outline:none;box-sizing:border-box;"></div>
+          <div><label style="display:block;text-align:right;font-size:13px;color:#5C6360;margin-bottom:8px;font-weight:500;">المدينة</label><input type="text" data-pcf="city" style="width:100%;padding:12px 14px;border:1px solid #ECECEC;border-radius:12px;font-family:inherit;font-size:14px;color:#16261C;background:#fff;text-align:right;outline:none;box-sizing:border-box;"></div>
+          <div><label style="display:block;text-align:right;font-size:13px;color:#5C6360;margin-bottom:8px;font-weight:500;">الحي</label><input type="text" data-pcf="district" style="width:100%;padding:12px 14px;border:1px solid #ECECEC;border-radius:12px;font-family:inherit;font-size:14px;color:#16261C;background:#fff;text-align:right;outline:none;box-sizing:border-box;"></div>
+        </div>
+        <div style="margin-top:16px;"><label style="display:block;text-align:right;font-size:13px;color:#5C6360;margin-bottom:8px;font-weight:500;">السعر (SAR)</label><input type="number" data-pcf="price" style="width:100%;padding:12px 14px;border:1px solid #ECECEC;border-radius:12px;font-family:inherit;font-size:14px;color:#16261C;background:#fff;text-align:right;outline:none;box-sizing:border-box;"></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px;">
+          <div><label style="display:block;text-align:right;font-size:13px;color:#5C6360;margin-bottom:8px;font-weight:500;">تاريخ المعاينة</label><input type="date" data-pcf="viewingDate" style="width:100%;padding:12px 14px;border:1px solid #ECECEC;border-radius:12px;font-family:inherit;font-size:14px;color:#16261C;background:#fff;outline:none;box-sizing:border-box;"></div>
+          <div><label style="display:block;text-align:right;font-size:13px;color:#5C6360;margin-bottom:8px;font-weight:500;">وقت المعاينة</label><input type="time" data-pcf="viewingTime" style="width:100%;padding:12px 14px;border:1px solid #ECECEC;border-radius:12px;font-family:inherit;font-size:14px;color:#16261C;background:#fff;outline:none;box-sizing:border-box;"></div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px;">
+          <div><label style="display:block;text-align:right;font-size:13px;color:#5C6360;margin-bottom:8px;font-weight:500;">حالة المعاينة</label><div style="position:relative;"><select data-pcf="viewingStatus" style="width:100%;padding:12px 14px;border:1px solid #ECECEC;border-radius:12px;font-family:inherit;font-size:14px;color:#16261C;background:#fff;text-align:right;outline:none;appearance:none;-webkit-appearance:none;box-sizing:border-box;"><option value="مجدولة">مجدولة</option><option value="مكتملة">مكتملة</option><option value="لم يحضر">لم يحضر</option><option value="ملغية">ملغية</option></select><svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="position:absolute;left:14px;top:50%;transform:translateY(-50%);pointer-events:none;"><path d="M6 9l6 6 6-6" stroke="#5C6360" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg></div></div>
+          <div><label style="display:block;text-align:right;font-size:13px;color:#5C6360;margin-bottom:8px;font-weight:500;">نتيجة المعاينة</label><div style="position:relative;"><select data-pcf="viewingResult" style="width:100%;padding:12px 14px;border:1px solid #ECECEC;border-radius:12px;font-family:inherit;font-size:14px;color:#16261C;background:#fff;text-align:right;outline:none;appearance:none;-webkit-appearance:none;box-sizing:border-box;"><option value="">-- اختر --</option><option value="عجبه">عجبه</option><option value="ما عجبه">ما عجبه</option><option value="يفكر">يفكر</option></select><svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="position:absolute;left:14px;top:50%;transform:translateY(-50%);pointer-events:none;"><path d="M6 9l6 6 6-6" stroke="#5C6360" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg></div></div>
+        </div>
+        <div style="margin-top:16px;"><label style="display:block;text-align:right;font-size:13px;color:#5C6360;margin-bottom:8px;font-weight:500;">عقار بديل</label><input type="text" data-pcf="alternativeProperty" style="width:100%;padding:12px 14px;border:1px solid #ECECEC;border-radius:12px;font-family:inherit;font-size:14px;color:#16261C;background:#fff;text-align:right;outline:none;box-sizing:border-box;"></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px;">
+          <div><label style="display:block;text-align:right;font-size:13px;color:#5C6360;margin-bottom:8px;font-weight:500;">حالة القرار</label><div style="position:relative;"><select data-pcf="decisionStatus" style="width:100%;padding:12px 14px;border:1px solid #ECECEC;border-radius:12px;font-family:inherit;font-size:14px;color:#16261C;background:#fff;text-align:right;outline:none;appearance:none;-webkit-appearance:none;box-sizing:border-box;"><option value="بانتظار">بانتظار</option><option value="وافق">وافق</option><option value="رفض">رفض</option></select><svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="position:absolute;left:14px;top:50%;transform:translateY(-50%);pointer-events:none;"><path d="M6 9l6 6 6-6" stroke="#5C6360" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg></div></div>
+          <div><label style="display:block;text-align:right;font-size:13px;color:#5C6360;margin-bottom:8px;font-weight:500;">حالة الصفقة</label><div style="position:relative;"><select data-pcf="dealStatus" style="width:100%;padding:12px 14px;border:1px solid #ECECEC;border-radius:12px;font-family:inherit;font-size:14px;color:#16261C;background:#fff;text-align:right;outline:none;appearance:none;-webkit-appearance:none;box-sizing:border-box;"><option value="جارية">جارية</option><option value="مكتملة">مكتملة</option><option value="ملغية">ملغية</option></select><svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="position:absolute;left:14px;top:50%;transform:translateY(-50%);pointer-events:none;"><path d="M6 9l6 6 6-6" stroke="#5C6360" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg></div></div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px;">
+          <div><label style="display:block;text-align:right;font-size:13px;color:#5C6360;margin-bottom:8px;font-weight:500;">تاريخ زيارة المكتب</label><input type="date" data-pcf="officeVisitDate" style="width:100%;padding:12px 14px;border:1px solid #ECECEC;border-radius:12px;font-family:inherit;font-size:14px;color:#16261C;background:#fff;outline:none;box-sizing:border-box;"></div>
+          <div><label style="display:block;text-align:right;font-size:13px;color:#5C6360;margin-bottom:8px;font-weight:500;">وقت زيارة المكتب</label><input type="time" data-pcf="officeVisitTime" style="width:100%;padding:12px 14px;border:1px solid #ECECEC;border-radius:12px;font-family:inherit;font-size:14px;color:#16261C;background:#fff;outline:none;box-sizing:border-box;"></div>
+        </div>
+        <div style="margin-top:16px;"><label style="display:block;text-align:right;font-size:13px;color:#5C6360;margin-bottom:8px;font-weight:500;">ملاحظات</label><textarea data-pcf="notes" rows="3" style="width:100%;padding:12px 14px;border:1px solid #ECECEC;border-radius:12px;font-family:inherit;font-size:14px;color:#16261C;background:#fff;text-align:right;outline:none;resize:vertical;box-sizing:border-box;"></textarea></div>
+        <div style="display:flex;gap:14px;align-items:center;margin-top:26px;border-top:1px solid #F0F0F0;padding-top:20px;">
+          <button onClick="{{ savePC }}" style="flex:1;border:none;border-radius:14px;padding:14px;background:#8BD850;color:#16261C;font-family:inherit;font-size:14.5px;font-weight:700;cursor:pointer;">{{ pcSaveLabel }}</button>
+          <button onClick="{{ closePCForm }}" style="border:1px solid #ECECEC;border-radius:14px;padding:14px 24px;background:#FFFFFF;color:#5C6360;font-family:inherit;font-size:14px;font-weight:600;cursor:pointer;">إلغاء</button>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- ============ RENTAL CLIENTS FORM ============ -->
+  <sc-if value="{{ showRCForm }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ closeRCForm }}" style="position:fixed;inset:0;z-index:1002;background:rgba(15,25,18,0.45);display:flex;align-items:flex-start;justify-content:center;overflow-y:auto;padding:32px 16px;">
+      <div data-rc-form-root="1" dir="rtl" onClick="{{ stopRC }}" style="width:90%;max-width:700px;background:#FFFFFF;border-radius:22px;padding:28px 30px;box-shadow:0 30px 80px rgba(0,0,0,0.3);font-family:'Plus Jakarta Sans',sans-serif;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:22px;">
+          <span style="font-size:22px;font-weight:800;">{{ rcFormTitle }}</span>
+          <button onClick="{{ closeRCForm }}" style="width:34px;height:34px;border-radius:10px;border:1px solid #ECECEC;background:#FFFFFF;cursor:pointer;font-size:16px;color:#5C6360;">✕</button>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+          <div><label style="display:block;text-align:right;font-size:13px;color:#5C6360;margin-bottom:8px;font-weight:500;">الاسم الأول <span style="color:#E5484D;">*</span></label><input type="text" data-rcf="firstName" style="width:100%;padding:12px 14px;border:1px solid #ECECEC;border-radius:12px;font-family:inherit;font-size:14px;color:#16261C;background:#fff;text-align:right;outline:none;box-sizing:border-box;"></div>
+          <div><label style="display:block;text-align:right;font-size:13px;color:#5C6360;margin-bottom:8px;font-weight:500;">الاسم الأخير</label><input type="text" data-rcf="lastName" style="width:100%;padding:12px 14px;border:1px solid #ECECEC;border-radius:12px;font-family:inherit;font-size:14px;color:#16261C;background:#fff;text-align:right;outline:none;box-sizing:border-box;"></div>
+        </div>
+        <div style="margin-top:16px;"><label style="display:block;text-align:right;font-size:13px;color:#5C6360;margin-bottom:8px;font-weight:500;">رقم الجوال</label><input type="text" data-rcf="phone" style="width:100%;padding:12px 14px;border:1px solid #ECECEC;border-radius:12px;font-family:inherit;font-size:14px;color:#16261C;background:#fff;text-align:right;outline:none;box-sizing:border-box;"></div>
+        <div style="margin-top:16px;"><label style="display:block;text-align:right;font-size:13px;color:#5C6360;margin-bottom:8px;font-weight:500;">العقار</label><div style="position:relative;"><select data-rcf="propertyTitle" onChange="{{ onRCPropSelect }}" style="width:100%;padding:12px 14px;border:1px solid #ECECEC;border-radius:12px;font-family:inherit;font-size:14px;color:#16261C;background:#fff;text-align:right;outline:none;appearance:none;-webkit-appearance:none;box-sizing:border-box;">{{ propSelectOpts }}</select><svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="position:absolute;left:14px;top:50%;transform:translateY(-50%);pointer-events:none;"><path d="M6 9l6 6 6-6" stroke="#5C6360" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg></div></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-top:16px;">
+          <div><label style="display:block;text-align:right;font-size:13px;color:#5C6360;margin-bottom:8px;font-weight:500;">رقم المرجع</label><input type="text" data-rcf="propertyRef" style="width:100%;padding:12px 14px;border:1px solid #ECECEC;border-radius:12px;font-family:inherit;font-size:14px;color:#16261C;background:#fff;text-align:right;outline:none;box-sizing:border-box;"></div>
+          <div><label style="display:block;text-align:right;font-size:13px;color:#5C6360;margin-bottom:8px;font-weight:500;">المدينة</label><input type="text" data-rcf="city" style="width:100%;padding:12px 14px;border:1px solid #ECECEC;border-radius:12px;font-family:inherit;font-size:14px;color:#16261C;background:#fff;text-align:right;outline:none;box-sizing:border-box;"></div>
+          <div><label style="display:block;text-align:right;font-size:13px;color:#5C6360;margin-bottom:8px;font-weight:500;">الحي</label><input type="text" data-rcf="district" style="width:100%;padding:12px 14px;border:1px solid #ECECEC;border-radius:12px;font-family:inherit;font-size:14px;color:#16261C;background:#fff;text-align:right;outline:none;box-sizing:border-box;"></div>
+        </div>
+        <div style="margin-top:16px;"><label style="display:block;text-align:right;font-size:13px;color:#5C6360;margin-bottom:8px;font-weight:500;">السعر الشهري (SAR)</label><input type="number" data-rcf="monthlyPrice" style="width:100%;padding:12px 14px;border:1px solid #ECECEC;border-radius:12px;font-family:inherit;font-size:14px;color:#16261C;background:#fff;text-align:right;outline:none;box-sizing:border-box;"></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px;">
+          <div><label style="display:block;text-align:right;font-size:13px;color:#5C6360;margin-bottom:8px;font-weight:500;">تاريخ المعاينة</label><input type="date" data-rcf="viewingDate" style="width:100%;padding:12px 14px;border:1px solid #ECECEC;border-radius:12px;font-family:inherit;font-size:14px;color:#16261C;background:#fff;outline:none;box-sizing:border-box;"></div>
+          <div><label style="display:block;text-align:right;font-size:13px;color:#5C6360;margin-bottom:8px;font-weight:500;">وقت المعاينة</label><input type="time" data-rcf="viewingTime" style="width:100%;padding:12px 14px;border:1px solid #ECECEC;border-radius:12px;font-family:inherit;font-size:14px;color:#16261C;background:#fff;outline:none;box-sizing:border-box;"></div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px;">
+          <div><label style="display:block;text-align:right;font-size:13px;color:#5C6360;margin-bottom:8px;font-weight:500;">حالة المعاينة</label><div style="position:relative;"><select data-rcf="viewingStatus" style="width:100%;padding:12px 14px;border:1px solid #ECECEC;border-radius:12px;font-family:inherit;font-size:14px;color:#16261C;background:#fff;text-align:right;outline:none;appearance:none;-webkit-appearance:none;box-sizing:border-box;"><option value="مجدولة">مجدولة</option><option value="مكتملة">مكتملة</option><option value="لم يحضر">لم يحضر</option><option value="ملغية">ملغية</option></select><svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="position:absolute;left:14px;top:50%;transform:translateY(-50%);pointer-events:none;"><path d="M6 9l6 6 6-6" stroke="#5C6360" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg></div></div>
+          <div><label style="display:block;text-align:right;font-size:13px;color:#5C6360;margin-bottom:8px;font-weight:500;">نتيجة المعاينة</label><div style="position:relative;"><select data-rcf="viewingResult" style="width:100%;padding:12px 14px;border:1px solid #ECECEC;border-radius:12px;font-family:inherit;font-size:14px;color:#16261C;background:#fff;text-align:right;outline:none;appearance:none;-webkit-appearance:none;box-sizing:border-box;"><option value="">-- اختر --</option><option value="عجبه">عجبه</option><option value="ما عجبه">ما عجبه</option><option value="يفكر">يفكر</option></select><svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="position:absolute;left:14px;top:50%;transform:translateY(-50%);pointer-events:none;"><path d="M6 9l6 6 6-6" stroke="#5C6360" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg></div></div>
+        </div>
+        <div style="margin-top:16px;"><label style="display:block;text-align:right;font-size:13px;color:#5C6360;margin-bottom:8px;font-weight:500;">عقار بديل</label><input type="text" data-rcf="alternativeProperty" style="width:100%;padding:12px 14px;border:1px solid #ECECEC;border-radius:12px;font-family:inherit;font-size:14px;color:#16261C;background:#fff;text-align:right;outline:none;box-sizing:border-box;"></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px;">
+          <div><label style="display:block;text-align:right;font-size:13px;color:#5C6360;margin-bottom:8px;font-weight:500;">حالة القرار</label><div style="position:relative;"><select data-rcf="decisionStatus" style="width:100%;padding:12px 14px;border:1px solid #ECECEC;border-radius:12px;font-family:inherit;font-size:14px;color:#16261C;background:#fff;text-align:right;outline:none;appearance:none;-webkit-appearance:none;box-sizing:border-box;"><option value="بانتظار">بانتظار</option><option value="وافق">وافق</option><option value="رفض">رفض</option></select><svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="position:absolute;left:14px;top:50%;transform:translateY(-50%);pointer-events:none;"><path d="M6 9l6 6 6-6" stroke="#5C6360" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg></div></div>
+          <div><label style="display:block;text-align:right;font-size:13px;color:#5C6360;margin-bottom:8px;font-weight:500;">حالة العقد</label><div style="position:relative;"><select data-rcf="contractStatus" style="width:100%;padding:12px 14px;border:1px solid #ECECEC;border-radius:12px;font-family:inherit;font-size:14px;color:#16261C;background:#fff;text-align:right;outline:none;appearance:none;-webkit-appearance:none;box-sizing:border-box;"><option value="جاري">جاري</option><option value="موقع">موقع</option><option value="ملغي">ملغي</option></select><svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="position:absolute;left:14px;top:50%;transform:translateY(-50%);pointer-events:none;"><path d="M6 9l6 6 6-6" stroke="#5C6360" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg></div></div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px;">
+          <div><label style="display:block;text-align:right;font-size:13px;color:#5C6360;margin-bottom:8px;font-weight:500;">تاريخ زيارة المكتب</label><input type="date" data-rcf="officeVisitDate" style="width:100%;padding:12px 14px;border:1px solid #ECECEC;border-radius:12px;font-family:inherit;font-size:14px;color:#16261C;background:#fff;outline:none;box-sizing:border-box;"></div>
+          <div><label style="display:block;text-align:right;font-size:13px;color:#5C6360;margin-bottom:8px;font-weight:500;">وقت زيارة المكتب</label><input type="time" data-rcf="officeVisitTime" style="width:100%;padding:12px 14px;border:1px solid #ECECEC;border-radius:12px;font-family:inherit;font-size:14px;color:#16261C;background:#fff;outline:none;box-sizing:border-box;"></div>
+        </div>
+        <div style="margin-top:16px;"><label style="display:block;text-align:right;font-size:13px;color:#5C6360;margin-bottom:8px;font-weight:500;">ملاحظات</label><textarea data-rcf="notes" rows="3" style="width:100%;padding:12px 14px;border:1px solid #ECECEC;border-radius:12px;font-family:inherit;font-size:14px;color:#16261C;background:#fff;text-align:right;outline:none;resize:vertical;box-sizing:border-box;"></textarea></div>
+        <div style="display:flex;gap:14px;align-items:center;margin-top:26px;border-top:1px solid #F0F0F0;padding-top:20px;">
+          <button onClick="{{ saveRC }}" style="flex:1;border:none;border-radius:14px;padding:14px;background:#8BD850;color:#16261C;font-family:inherit;font-size:14.5px;font-weight:700;cursor:pointer;">{{ rcSaveLabel }}</button>
+          <button onClick="{{ closeRCForm }}" style="border:1px solid #ECECEC;border-radius:14px;padding:14px 24px;background:#FFFFFF;color:#5C6360;font-family:inherit;font-size:14px;font-weight:600;cursor:pointer;">إلغاء</button>
+        </div>
+      </div>
+    </div>
+  </sc-if>
 </div>
 </x-dc>
 <script type="text/x-dc" data-dc-script>
@@ -669,7 +907,10 @@ class Component extends DCLogic {
     page: 'dashboard', showForm: false, images: [], dragOver: false, editId: null,
     fType: '', fStatus: '', q: '',
     props: [],
-    bookings: [], bookingTab: 'all', showBookingForm: false, editBookingId: null
+    bookings: [], bookingTab: 'all', showBookingForm: false, editBookingId: null,
+    clientRequests: [], showCRForm: false, editCRId: null,
+    purchaseClients: [], showPCForm: false, editPCId: null,
+    rentalClients: [], showRCForm: false, editRCId: null
   };
 
   componentDidMount() {
@@ -680,6 +921,18 @@ class Component extends DCLogic {
     fetch('/api/bookings')
       .then(r => r.json())
       .then(a => { if (Array.isArray(a)) this.setState({ bookings: a }); })
+      .catch(() => {});
+    fetch('/api/client-requests')
+      .then(r => r.json())
+      .then(a => { if (Array.isArray(a)) this.setState({ clientRequests: a }); })
+      .catch(() => {});
+    fetch('/api/purchase-clients')
+      .then(r => r.json())
+      .then(a => { if (Array.isArray(a)) this.setState({ purchaseClients: a }); })
+      .catch(() => {});
+    fetch('/api/rental-clients')
+      .then(r => r.json())
+      .then(a => { if (Array.isArray(a)) this.setState({ rentalClients: a }); })
       .catch(() => {});
   }
 
@@ -692,11 +945,23 @@ class Component extends DCLogic {
       if (this.state.editBookingId) this.populateBooking();
       else this.resetBookingForm();
     }
+    if (this.state.showCRForm && !prev.showCRForm) {
+      if (this.state.editCRId) this.populateCR(); else this.resetCRForm();
+    }
+    if (this.state.showPCForm && !prev.showPCForm) {
+      if (this.state.editPCId) this.populatePC(); else this.resetPCForm();
+    }
+    if (this.state.showRCForm && !prev.showRCForm) {
+      if (this.state.editRCId) this.populateRC(); else this.resetRCForm();
+    }
   }
 
   goDashboard = () => this.setState({ page: 'dashboard' });
   goProperties = () => this.setState({ page: 'properties' });
-  goBookings   = () => this.setState({ page: 'bookings' });
+  goBookings        = () => this.setState({ page: 'bookings' });
+  goClientRequests  = () => this.setState({ page: 'client-requests' });
+  goPurchaseClients = () => this.setState({ page: 'purchase-clients' });
+  goRentalClients   = () => this.setState({ page: 'rental-clients' });
 
   openForm = () => { this._draft = null; this.setState({ editId: null, showForm: true, images: [] }, () => this.resetForm()); };
   openEdit = (p) => { this._draft = p; this.setState({ editId: p.id, showForm: true, images: (p.images || []).slice() }, () => this.populate()); };
@@ -707,6 +972,21 @@ class Component extends DCLogic {
   openEditBooking  = (b) => { this._bdraft = b;   this.setState({ editBookingId: b.id, showBookingForm: true }); };
   closeBookingForm = () => this.setState({ showBookingForm: false, editBookingId: null });
   stopBF = (e) => e.stopPropagation();
+
+  openCRForm   = () => { this._crdraft = null; this.setState({ editCRId: null, showCRForm: true }); };
+  openEditCR   = (x) => { this._crdraft = x;   this.setState({ editCRId: x.id, showCRForm: true }); };
+  closeCRForm  = () => this.setState({ showCRForm: false, editCRId: null });
+  stopCR = (e) => e.stopPropagation();
+
+  openPCForm   = () => { this._pcdraft = null; this.setState({ editPCId: null, showPCForm: true }); };
+  openEditPC   = (x) => { this._pcdraft = x;   this.setState({ editPCId: x.id, showPCForm: true }); };
+  closePCForm  = () => this.setState({ showPCForm: false, editPCId: null });
+  stopPC = (e) => e.stopPropagation();
+
+  openRCForm   = () => { this._rcdraft = null; this.setState({ editRCId: null, showRCForm: true }); };
+  openEditRC   = (x) => { this._rcdraft = x;   this.setState({ editRCId: x.id, showRCForm: true }); };
+  closeRCForm  = () => this.setState({ showRCForm: false, editRCId: null });
+  stopRC = (e) => e.stopPropagation();
 
   handleFiles = (fileList) => {
     const allowed = ['image/jpeg', 'image/png', 'image/webp'];
@@ -874,6 +1154,140 @@ class Component extends DCLogic {
     fetch('/api/bookings/' + id, { method: 'DELETE' })
       .then(() => { this.setState({ bookings: this.state.bookings.filter(b => b.id !== id) }); })
       .catch(() => {});
+  };
+
+  // ---- Client Requests ----
+  _crFormRoot() { return this._container && this._container.querySelector('[data-cr-form-root="1"]'); }
+  resetCRForm() {
+    const root = this._crFormRoot(); if (!root) return;
+    root.querySelectorAll('[data-crf]').forEach(el => {
+      if (el.type === 'checkbox') el.checked = false;
+      else if (el.tagName === 'SELECT') el.selectedIndex = 0;
+      else el.value = '';
+    });
+  }
+  populateCR() {
+    const root = this._crFormRoot(), d = this._crdraft; if (!root || !d) return;
+    root.querySelectorAll('[data-crf]').forEach(el => {
+      const k = el.getAttribute('data-crf'); if (!(k in d)) return;
+      if (el.type === 'checkbox') el.checked = !!d[k]; else el.value = d[k] != null ? d[k] : '';
+    });
+  }
+  readCRForm() {
+    const root = this._crFormRoot(); if (!root) return {};
+    const o = {};
+    root.querySelectorAll('[data-crf]').forEach(el => { o[el.getAttribute('data-crf')] = el.type === 'checkbox' ? el.checked : el.value; });
+    return o;
+  }
+  saveCR = () => {
+    const f = this.readCRForm();
+    const body = { firstName:(f.firstName||'').trim(), lastName:(f.lastName||'').trim(), phone:(f.phone||'').trim(),
+      requestType:f.requestType||'شراء', propertyType:f.propertyType||'شقة', city:(f.city||'').trim(),
+      preferredDistrict:(f.preferredDistrict||'').trim(), bedrooms:f.bedrooms||'', bathrooms:f.bathrooms||'',
+      areaNeeded:f.areaNeeded||'', budgetFrom:f.budgetFrom||'', budgetTo:f.budgetTo||'',
+      furnished:!!f.furnished, clientNotes:(f.clientNotes||'').trim(),
+      requestStatus:f.requestStatus||'جديد', assignedTo:(f.assignedTo||'').trim() };
+    const isEdit = !!this.state.editCRId;
+    fetch(isEdit?'/api/client-requests/'+this.state.editCRId:'/api/client-requests',
+      {method:isEdit?'PUT':'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body)})
+      .then(r=>r.json()).then(saved => {
+        const clientRequests = isEdit ? this.state.clientRequests.map(x=>x.id===saved.id?saved:x) : [saved,...this.state.clientRequests];
+        this.setState({clientRequests, showCRForm:false, editCRId:null});
+      }).catch(()=>{});
+  };
+  deleteCR = (id) => {
+    fetch('/api/client-requests/'+id,{method:'DELETE'})
+      .then(()=>this.setState({clientRequests:this.state.clientRequests.filter(x=>x.id!==id)})).catch(()=>{});
+  };
+
+  // ---- Purchase Clients ----
+  _pcFormRoot() { return this._container && this._container.querySelector('[data-pc-form-root="1"]'); }
+  resetPCForm() {
+    const root = this._pcFormRoot(); if (!root) return;
+    root.querySelectorAll('[data-pcf]').forEach(el => { if (el.tagName === 'SELECT') el.selectedIndex = 0; else el.value = ''; });
+  }
+  populatePC() {
+    const root = this._pcFormRoot(), d = this._pcdraft; if (!root || !d) return;
+    root.querySelectorAll('[data-pcf]').forEach(el => {
+      const k = el.getAttribute('data-pcf'); if (!(k in d)) return; el.value = d[k] != null ? d[k] : '';
+    });
+  }
+  readPCForm() {
+    const root = this._pcFormRoot(); if (!root) return {};
+    const o = {}; root.querySelectorAll('[data-pcf]').forEach(el => { o[el.getAttribute('data-pcf')] = el.value; }); return o;
+  }
+  onPCPropSelect = (e) => {
+    const root = this._pcFormRoot(); if (!root) return;
+    const prop = this.state.props.find(p => p.title === e.target.value); if (!prop) return;
+    const set = (k,v) => { const el=root.querySelector('[data-pcf="'+k+'"]'); if(el) el.value=v||''; };
+    set('propertyRef',prop.ref); set('city',prop.city); set('district',prop.district); set('price',prop.price);
+  };
+  savePC = () => {
+    const f = this.readPCForm();
+    const body = { firstName:(f.firstName||'').trim(), lastName:(f.lastName||'').trim(), phone:(f.phone||'').trim(),
+      propertyTitle:(f.propertyTitle||'').trim(), propertyRef:(f.propertyRef||'').trim(),
+      propertyType:(f.propertyType||'').trim(), city:(f.city||'').trim(), district:(f.district||'').trim(),
+      price:f.price||'', viewingDate:f.viewingDate||'', viewingTime:f.viewingTime||'',
+      viewingStatus:f.viewingStatus||'مجدولة', viewingResult:f.viewingResult||'',
+      alternativeProperty:(f.alternativeProperty||'').trim(), decisionStatus:f.decisionStatus||'بانتظار',
+      officeVisitDate:f.officeVisitDate||'', officeVisitTime:f.officeVisitTime||'',
+      dealStatus:f.dealStatus||'جارية', notes:(f.notes||'').trim() };
+    const isEdit = !!this.state.editPCId;
+    fetch(isEdit?'/api/purchase-clients/'+this.state.editPCId:'/api/purchase-clients',
+      {method:isEdit?'PUT':'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body)})
+      .then(r=>r.json()).then(saved => {
+        const purchaseClients = isEdit ? this.state.purchaseClients.map(x=>x.id===saved.id?saved:x) : [saved,...this.state.purchaseClients];
+        this.setState({purchaseClients, showPCForm:false, editPCId:null});
+      }).catch(()=>{});
+  };
+  deletePC = (id) => {
+    fetch('/api/purchase-clients/'+id,{method:'DELETE'})
+      .then(()=>this.setState({purchaseClients:this.state.purchaseClients.filter(x=>x.id!==id)})).catch(()=>{});
+  };
+
+  // ---- Rental Clients ----
+  _rcFormRoot() { return this._container && this._container.querySelector('[data-rc-form-root="1"]'); }
+  resetRCForm() {
+    const root = this._rcFormRoot(); if (!root) return;
+    root.querySelectorAll('[data-rcf]').forEach(el => { if (el.tagName === 'SELECT') el.selectedIndex = 0; else el.value = ''; });
+  }
+  populateRC() {
+    const root = this._rcFormRoot(), d = this._rcdraft; if (!root || !d) return;
+    root.querySelectorAll('[data-rcf]').forEach(el => {
+      const k = el.getAttribute('data-rcf'); if (!(k in d)) return; el.value = d[k] != null ? d[k] : '';
+    });
+  }
+  readRCForm() {
+    const root = this._rcFormRoot(); if (!root) return {};
+    const o = {}; root.querySelectorAll('[data-rcf]').forEach(el => { o[el.getAttribute('data-rcf')] = el.value; }); return o;
+  }
+  onRCPropSelect = (e) => {
+    const root = this._rcFormRoot(); if (!root) return;
+    const prop = this.state.props.find(p => p.title === e.target.value); if (!prop) return;
+    const set = (k,v) => { const el=root.querySelector('[data-rcf="'+k+'"]'); if(el) el.value=v||''; };
+    set('propertyRef',prop.ref); set('city',prop.city); set('district',prop.district); set('monthlyPrice',prop.price);
+  };
+  saveRC = () => {
+    const f = this.readRCForm();
+    const body = { firstName:(f.firstName||'').trim(), lastName:(f.lastName||'').trim(), phone:(f.phone||'').trim(),
+      propertyTitle:(f.propertyTitle||'').trim(), propertyRef:(f.propertyRef||'').trim(),
+      propertyType:(f.propertyType||'').trim(), city:(f.city||'').trim(), district:(f.district||'').trim(),
+      monthlyPrice:f.monthlyPrice||'', viewingDate:f.viewingDate||'', viewingTime:f.viewingTime||'',
+      viewingStatus:f.viewingStatus||'مجدولة', viewingResult:f.viewingResult||'',
+      alternativeProperty:(f.alternativeProperty||'').trim(), decisionStatus:f.decisionStatus||'بانتظار',
+      officeVisitDate:f.officeVisitDate||'', officeVisitTime:f.officeVisitTime||'',
+      contractStatus:f.contractStatus||'جاري', notes:(f.notes||'').trim() };
+    const isEdit = !!this.state.editRCId;
+    fetch(isEdit?'/api/rental-clients/'+this.state.editRCId:'/api/rental-clients',
+      {method:isEdit?'PUT':'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body)})
+      .then(r=>r.json()).then(saved => {
+        const rentalClients = isEdit ? this.state.rentalClients.map(x=>x.id===saved.id?saved:x) : [saved,...this.state.rentalClients];
+        this.setState({rentalClients, showRCForm:false, editRCId:null});
+      }).catch(()=>{});
+  };
+  deleteRC = (id) => {
+    fetch('/api/rental-clients/'+id,{method:'DELETE'})
+      .then(()=>this.setState({rentalClients:this.state.rentalClients.filter(x=>x.id!==id)})).catch(()=>{});
   };
 
   renderVals() {
@@ -1053,23 +1467,116 @@ class Component extends DCLogic {
       })
     ) : null;
 
+    // ---------- CLIENT REQUESTS ----------
+    const { clientRequests, purchaseClients, rentalClients } = this.state;
+
+    const fmtDate = (s) => {
+      if (!s) return '—';
+      try { return new Date(s+'T12:00:00').toLocaleDateString('ar-SA',{year:'numeric',month:'short',day:'numeric'}); }
+      catch(e) { return s; }
+    };
+
+    const crStatusC = {'جديد':['#2563EB','#EFF6FF'],'جاري البحث':['#C98A1B','#FBF1DD'],'تم التوفير':['#5FB13B','#EAF7E0'],'ملغي':['#E5484D','#FDECEC']};
+    const crTypeC   = {'شراء':['#16261C','#E8F0E9'],'إيجار':['#2563EB','#EFF6FF']};
+
+    const crRows = clientRequests.length ? R('div', {},
+      clientRequests.map((x,k) => {
+        const sc=crStatusC[x.requestStatus]||crStatusC['جديد'], tc=crTypeC[x.requestType]||crTypeC['شراء'];
+        return R('div',{key:x.id,style:{display:'grid',gridTemplateColumns:'70px 90px 1.2fr 110px 80px 80px 90px 1fr 110px 80px',gap:10,alignItems:'center',padding:'13px 20px',borderBottom:k<clientRequests.length-1?'1px solid #F4F4F4':'none'}},
+          R('div',{style:{fontSize:11.5,color:'#9AA0A6',fontFamily:'monospace'}},('#'+x.id.slice(-5)).toUpperCase()),
+          R('div',{style:{fontSize:12,color:'#5C6360'}},fmtDate(x.createdAt)),
+          R('div',{},
+            R('div',{style:{fontSize:13.5,fontWeight:700,color:'#16261C'}},(x.firstName||'')+' '+(x.lastName||'')),
+            x.assignedTo?R('div',{style:{fontSize:11.5,color:'#9AA0A6',marginTop:2}},'مكلف: '+x.assignedTo):null
+          ),
+          R('div',{style:{fontSize:12.5,color:'#5C6360'}},x.phone||'—'),
+          R('span',{style:{fontSize:11,fontWeight:700,color:tc[0],background:tc[1],borderRadius:20,padding:'4px 10px',whiteSpace:'nowrap',display:'inline-block'}},x.requestType||'شراء'),
+          R('div',{style:{fontSize:12.5,color:'#5C6360'}},x.propertyType||'—'),
+          R('div',{style:{fontSize:12.5,color:'#5C6360'}},x.city||'—'),
+          R('div',{style:{fontSize:12,color:'#16261C'}},(x.budgetFrom||x.budgetTo)?(x.budgetFrom||'')+(x.budgetTo?' - '+x.budgetTo:''):'—'),
+          R('span',{style:{fontSize:11,fontWeight:700,color:sc[0],background:sc[1],borderRadius:20,padding:'4px 10px',whiteSpace:'nowrap',display:'inline-block'}},x.requestStatus||'جديد'),
+          R('div',{style:{display:'flex',gap:5}},
+            R('button',{onClick:()=>this.openEditCR(x),style:{border:'none',borderRadius:7,padding:'7px 10px',background:'#16261C',color:'#fff',fontFamily:'inherit',fontSize:11.5,fontWeight:700,cursor:'pointer'}},'تعديل'),
+            R('button',{onClick:()=>this.deleteCR(x.id),style:{border:'none',borderRadius:7,padding:'7px 8px',background:'#FDECEC',color:'#E5484D',fontFamily:'inherit',fontSize:11.5,fontWeight:700,cursor:'pointer'}},'حذف')
+          )
+        );
+      })
+    ) : null;
+
+    // ---------- PURCHASE / RENTAL CLIENTS ----------
+    const vStatusC={'مجدولة':['#C98A1B','#FBF1DD'],'مكتملة':['#5FB13B','#EAF7E0'],'لم يحضر':['#E5484D','#FDECEC'],'ملغية':['#7A807D','#F1F2F2']};
+    const vResultC={'عجبه':['#5FB13B','#EAF7E0'],'ما عجبه':['#E5484D','#FDECEC'],'يفكر':['#C98A1B','#FBF1DD']};
+    const dStatusC={'بانتظار':['#C98A1B','#FBF1DD'],'وافق':['#5FB13B','#EAF7E0'],'رفض':['#E5484D','#FDECEC']};
+    const dealStatusC={'جارية':['#C98A1B','#FBF1DD'],'مكتملة':['#5FB13B','#EAF7E0'],'ملغية':['#E5484D','#FDECEC']};
+    const contractStatusC={'جاري':['#C98A1B','#FBF1DD'],'موقع':['#5FB13B','#EAF7E0'],'ملغي':['#E5484D','#FDECEC']};
+    const pcRcGridCols = '70px 90px 1fr 100px 1fr 90px 100px 90px 90px 80px 90px 80px';
+
+    const makePCRCRow = (x, k, list, lastCol, onEdit, onDelete) => {
+      const vs=vStatusC[x.viewingStatus]||vStatusC['مجدولة'];
+      const vr=vResultC[x.viewingResult]||null;
+      const ds=dStatusC[x.decisionStatus]||dStatusC['بانتظار'];
+      const priceVal=x.price||x.monthlyPrice;
+      return R('div',{key:x.id,style:{display:'grid',gridTemplateColumns:pcRcGridCols,gap:10,alignItems:'center',padding:'13px 20px',borderBottom:k<list.length-1?'1px solid #F4F4F4':'none'}},
+        R('div',{style:{fontSize:11.5,color:'#9AA0A6',fontFamily:'monospace'}},('#'+x.id.slice(-5)).toUpperCase()),
+        R('div',{style:{fontSize:12,color:'#5C6360'}},fmtDate(x.createdAt)),
+        R('div',{},
+          R('div',{style:{fontSize:13.5,fontWeight:700,color:'#16261C'}},(x.firstName||'')+' '+(x.lastName||'')),
+          R('div',{style:{fontSize:11.5,color:'#9AA0A6',marginTop:2}},x.phone||'')
+        ),
+        R('div',{style:{fontSize:12.5,color:'#5C6360'}},x.phone||'—'),
+        R('div',{},
+          R('div',{style:{fontSize:12.5,fontWeight:600,color:'#16261C'}},x.propertyTitle||'—'),
+          x.propertyRef?R('div',{style:{fontSize:11,color:'#9AA0A6',marginTop:1}},x.propertyRef):null
+        ),
+        R('div',{style:{fontSize:12.5,fontWeight:700,color:'#1F8A5B'}},priceVal?(Number(priceVal)||0).toLocaleString('en-US'):'—'),
+        R('div',{style:{fontSize:12,color:'#5C6360'}},x.viewingDate?(x.viewingDate+(x.viewingTime?' '+x.viewingTime:'')):'—'),
+        R('span',{style:{fontSize:11,fontWeight:700,color:vs[0],background:vs[1],borderRadius:20,padding:'4px 10px',whiteSpace:'nowrap',display:'inline-block'}},x.viewingStatus||'مجدولة'),
+        vr?R('span',{style:{fontSize:11,fontWeight:700,color:vr[0],background:vr[1],borderRadius:20,padding:'4px 10px',whiteSpace:'nowrap',display:'inline-block'}},x.viewingResult)
+          :R('span',{style:{fontSize:11.5,color:'#AEB2B6'}},'—'),
+        R('span',{style:{fontSize:11,fontWeight:700,color:ds[0],background:ds[1],borderRadius:20,padding:'4px 10px',whiteSpace:'nowrap',display:'inline-block'}},x.decisionStatus||'بانتظار'),
+        R('span',{style:{fontSize:11,fontWeight:700,color:lastCol[0],background:lastCol[1],borderRadius:20,padding:'4px 10px',whiteSpace:'nowrap',display:'inline-block'}},x.dealStatus||x.contractStatus||''),
+        R('div',{style:{display:'flex',gap:5}},
+          R('button',{onClick:()=>onEdit(x),style:{border:'none',borderRadius:7,padding:'7px 10px',background:'#16261C',color:'#fff',fontFamily:'inherit',fontSize:11.5,fontWeight:700,cursor:'pointer'}},'تعديل'),
+          R('button',{onClick:()=>onDelete(x.id),style:{border:'none',borderRadius:7,padding:'7px 8px',background:'#FDECEC',color:'#E5484D',fontFamily:'inherit',fontSize:11.5,fontWeight:700,cursor:'pointer'}},'حذف')
+        )
+      );
+    };
+
+    const pcRows = purchaseClients.length ? R('div',{}, purchaseClients.map((x,k)=>makePCRCRow(x,k,purchaseClients, dealStatusC[x.dealStatus]||dealStatusC['جارية'], (x)=>this.openEditPC(x), (id)=>this.deletePC(id)))) : null;
+    const rcRows = rentalClients.length   ? R('div',{}, rentalClients.map((x,k)=>makePCRCRow(x,k,rentalClients,   contractStatusC[x.contractStatus]||contractStatusC['جاري'], (x)=>this.openEditRC(x), (id)=>this.deleteRC(id)))) : null;
+
+    // prop select options for PC/RC forms
+    const propSelectOpts = [
+      R('option',{value:'',key:''},'-- اختر العقار --'),
+      ...this.state.props.map(p=>R('option',{value:p.title,key:p.id},p.title+(p.ref?' ['+p.ref+']':'')))
+    ];
+
     // ---------- NAV STATE ----------
     const activeCSS = 'display:flex;align-items:center;gap:12px;padding:11px 14px;border-radius:12px;background:#FFFFFF;box-shadow:0 1px 3px rgba(0,0,0,0.06);font-weight:700;font-size:14px;cursor:pointer;color:#16261C';
     const idleCSS   = 'display:flex;align-items:center;gap:12px;padding:11px 14px;border-radius:12px;background:transparent;color:#5C6360;font-size:14px;font-weight:500;cursor:pointer';
     const page = this.state.page;
-    const dashStyle = page === 'dashboard'  ? activeCSS : idleCSS;
-    const propStyle = page === 'properties' ? activeCSS : idleCSS;
-    const bookStyle = page === 'bookings'   ? activeCSS : idleCSS;
+    const dashStyle = page === 'dashboard'       ? activeCSS : idleCSS;
+    const propStyle = page === 'properties'      ? activeCSS : idleCSS;
+    const bookStyle = page === 'bookings'        ? activeCSS : idleCSS;
+    const crStyle   = page === 'client-requests' ? activeCSS : idleCSS;
+    const pcStyle   = page === 'purchase-clients'? activeCSS : idleCSS;
+    const rcStyle   = page === 'rental-clients'  ? activeCSS : idleCSS;
 
     const _hIn  = (e) => { e.currentTarget.style.background = '#F4F5F5'; };
     const _hOut = (e) => { e.currentTarget.style.background = 'transparent'; };
     const _noop = () => {};
-    const dashMEnter = page === 'dashboard'  ? _noop : _hIn;
-    const dashMLeave = page === 'dashboard'  ? _noop : _hOut;
-    const propMEnter = page === 'properties' ? _noop : _hIn;
-    const propMLeave = page === 'properties' ? _noop : _hOut;
-    const bookMEnter = page === 'bookings'   ? _noop : _hIn;
-    const bookMLeave = page === 'bookings'   ? _noop : _hOut;
+    const dashMEnter = page === 'dashboard'       ? _noop : _hIn;
+    const dashMLeave = page === 'dashboard'       ? _noop : _hOut;
+    const propMEnter = page === 'properties'      ? _noop : _hIn;
+    const propMLeave = page === 'properties'      ? _noop : _hOut;
+    const bookMEnter = page === 'bookings'        ? _noop : _hIn;
+    const bookMLeave = page === 'bookings'        ? _noop : _hOut;
+    const crMEnter   = page === 'client-requests' ? _noop : _hIn;
+    const crMLeave   = page === 'client-requests' ? _noop : _hOut;
+    const pcMEnter   = page === 'purchase-clients'? _noop : _hIn;
+    const pcMLeave   = page === 'purchase-clients'? _noop : _hOut;
+    const rcMEnter   = page === 'rental-clients'  ? _noop : _hIn;
+    const rcMLeave   = page === 'rental-clients'  ? _noop : _hOut;
 
     // ---------- PROPERTY CARDS ----------
     const stc = { 'متاح':['#5FB13B','#EAF7E0'], 'محجوز':['#C98A1B','#FBF1DD'], 'مباع':['#E5484D','#FDECEC'], 'مؤجر':['#7A6FF0','#EDEBFD'], 'مسودة':['#7A807D','#F1F2F2'] };
@@ -1137,10 +1644,12 @@ class Component extends DCLogic {
       saveProp: this.saveProp,
       formTitle: this.state.editId ? 'تعديل العقار' : 'عقار جديد',
       saveLabel: this.state.editId ? 'حفظ التعديلات' : 'إنشاء',
-      isDashboard: page === 'dashboard', isProperties: page === 'properties', isBookings: page === 'bookings',
+      isDashboard: page==='dashboard', isProperties: page==='properties', isBookings: page==='bookings',
+      isClientRequests: page==='client-requests', isPurchaseClients: page==='purchase-clients', isRentalClients: page==='rental-clients',
       goDashboard: this.goDashboard, goProperties: this.goProperties, goBookings: this.goBookings,
-      dashStyle, propStyle, bookStyle,
-      dashMEnter, dashMLeave, propMEnter, propMLeave, bookMEnter, bookMLeave,
+      goClientRequests: this.goClientRequests, goPurchaseClients: this.goPurchaseClients, goRentalClients: this.goRentalClients,
+      dashStyle, propStyle, bookStyle, crStyle, pcStyle, rcStyle,
+      dashMEnter, dashMLeave, propMEnter, propMLeave, bookMEnter, bookMLeave, crMEnter, crMLeave, pcMEnter, pcMLeave, rcMEnter, rcMLeave,
       propCards, noProps: filtered.length === 0,
       q: this.state.q, fType: this.state.fType, fStatus: this.state.fStatus,
       onSearch: this.onSearch, onFType: this.onFType, onFStatus: this.onFStatus,
@@ -1153,7 +1662,23 @@ class Component extends DCLogic {
       bTabAllStyle, bTabTodayStyle, bTabUpcomingStyle, bTabPastStyle,
       bTabAllClick, bTabTodayClick, bTabUpcomingClick, bTabPastClick,
       bCountAll: bAll.length, bCountToday: bToday.length,
-      bCountUpcoming: bUpcoming.length, bCountPast: bPast.length };
+      bCountUpcoming: bUpcoming.length, bCountPast: bPast.length,
+      crRows, noCR: clientRequests.length===0,
+      showCRForm: this.state.showCRForm, openCRForm: this.openCRForm, closeCRForm: this.closeCRForm,
+      stopCR: this.stopCR, saveCR: this.saveCR,
+      crFormTitle: this.state.editCRId?'تعديل الطلب':'طلب جديد',
+      crSaveLabel: this.state.editCRId?'حفظ التعديلات':'إنشاء الطلب',
+      pcRows, noPC: purchaseClients.length===0,
+      showPCForm: this.state.showPCForm, openPCForm: this.openPCForm, closePCForm: this.closePCForm,
+      stopPC: this.stopPC, savePC: this.savePC, onPCPropSelect: this.onPCPropSelect,
+      pcFormTitle: this.state.editPCId?'تعديل عميل شراء':'عميل شراء جديد',
+      pcSaveLabel: this.state.editPCId?'حفظ التعديلات':'إنشاء',
+      rcRows, noRC: rentalClients.length===0,
+      showRCForm: this.state.showRCForm, openRCForm: this.openRCForm, closeRCForm: this.closeRCForm,
+      stopRC: this.stopRC, saveRC: this.saveRC, onRCPropSelect: this.onRCPropSelect,
+      rcFormTitle: this.state.editRCId?'تعديل عميل استئجار':'عميل استئجار جديد',
+      rcSaveLabel: this.state.editRCId?'حفظ التعديلات':'إنشاء',
+      propSelectOpts };
   }
 }
 </script>

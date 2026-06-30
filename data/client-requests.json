@@ -1,0 +1,23 @@
+[
+  {
+    "id": "cr1782814056281",
+    "createdAt": "2026-06-30T10:07:36.281Z",
+    "updatedAt": "2026-06-30T10:07:36.281Z",
+    "firstName": "أحمد",
+    "lastName": "الغامدي",
+    "phone": "0551234567",
+    "requestType": "شراء",
+    "propertyType": "شقة",
+    "city": "الرياض",
+    "preferredDistrict": "",
+    "bedrooms": "",
+    "bathrooms": "",
+    "areaNeeded": "",
+    "budgetFrom": "500000",
+    "budgetTo": "800000",
+    "furnished": false,
+    "clientNotes": "",
+    "requestStatus": "جديد",
+    "assignedTo": ""
+  }
+]
