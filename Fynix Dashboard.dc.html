@@ -1545,8 +1545,7 @@ class Component extends DCLogic {
         ),
         R('td',{style:tds({fontSize:12.5,color:'#5C6360'})},x.phone||'—'),
         R('td',{style:tds({})},
-          R('div',{style:{fontSize:13.5,fontWeight:700,color:'#16261C'}},(x.firstName||'')+' '+(x.lastName||'')),
-          R('div',{style:{fontSize:11.5,color:'#9AA0A6',marginTop:2}},x.phone||'')
+          R('div',{style:{fontSize:13.5,fontWeight:700,color:'#16261C'}},(x.firstName||'')+' '+(x.lastName||''))
         ),
         R('td',{style:tds({fontSize:12,color:'#5C6360'})},fmtDate(x.createdAt)),
         R('td',{style:tds({fontSize:11.5,color:'#9AA0A6',fontFamily:'monospace'})},('#'+x.id.slice(-5)).toUpperCase())
